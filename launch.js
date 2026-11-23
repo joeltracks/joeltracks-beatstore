@@ -44,9 +44,7 @@ function showPurchases() {
     accessAPI('access/order').then(order=>{purchaseOrder=order;if(route()==='purchases')showPurchases();}).catch(()=>{}).finally(()=>{purchaseLoad=false;});
   }
 }
-function showStudio() {
-  nav(page('Seller workspace', '', empty('Seller access is not open yet', 'The workspace will open once private seller authentication is configured.', '<a class="btn secondary" href="#store">Back to the store</a>')));
-}
+function showStudio() { renderSellerWorkspace(); }
 function editBeat(){ showStudio(); }
 function negotiate(){ showStudio(); }
 function addCustom(){ showOffer(); }

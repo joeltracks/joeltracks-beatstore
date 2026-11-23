@@ -77,3 +77,8 @@ Added November 23 after the first Git-connected deployment reported that no `dis
 - `npm run build:cloudflare` preserves the original Worker build. `npm run dev:worker` remains the local Worker option. Do not point Vercel's public output at the repository root or the complete Cloudflare bundle, which contains backend code.
 
 Official references checked November 23: [Vercel output directory configuration](https://vercel.com/docs/project-configuration/vercel-json#outputdirectory), [Node Web Standard function exports](https://vercel.com/docs/functions/runtimes/node-js). The fix adds build-output/asset isolation and adapter tests. Hosted deployment status must be verified separately from a successful local build.
+
+
+## Seller authentication milestone
+
+Seller-only password/TOTP authentication is implemented separately from guest order access. The Vercel function now forwards Supabase server configuration and a dedicated seller-session encryption key for protected seller routes; it still omits the buyer mail/delivery activation bindings. See [seller access](SELLER_ACCESS.md). Seller authentication does not enable payments, buyer mail or R2 upload/publication.

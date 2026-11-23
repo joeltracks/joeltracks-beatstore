@@ -21,3 +21,12 @@
 #bulk-banner[hidden] {display:none!important}
 #player:empty {display:none}
 @media(max-width:700px){.access-layout{grid-template-columns:1fr;gap:24px}.access-panel{padding:24px}.access-support{padding:0}.purchase-files li{flex-wrap:wrap}.purchase-files li .btn{width:100%}.access-panel .btn{width:100%}}
+
+.seller-signin {margin-inline:auto}
+.seller-setup {margin-block:24px}
+.seller-setup-key {display:block;padding:16px;background:var(--color-surface-raised);border:1px solid var(--color-border);border-radius:var(--radius-md);font-size:18px;line-height:1.6;letter-spacing:.1em;overflow-wrap:anywhere;user-select:all}
+.seller-session-info {display:grid;gap:12px;min-width:0}
+.seller-session-info small {overflow-wrap:anywhere}
+.seller-session-info .status-pill {width:fit-content}
+
+.workspace>.panel {margin-block:var(--space-6)}

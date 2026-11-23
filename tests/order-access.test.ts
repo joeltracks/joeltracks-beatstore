@@ -109,9 +109,10 @@ test('email payloads are encrypted with unique nonces; tampering fails',async()=
   assert.notEqual(a,b);assert.equal(a.includes(value.email),false);assert.deepEqual(await unseal(env.ACCESS_SECRET!,a),value);
   await assert.rejects(unseal('wrong-key',a));assert.equal(safeFilename('x\r\nInjected:yes.mp3').includes('\n'),false);
 });
-test('no browser request can activate checkout or access the seller workspace',async()=>{
+test('checkout stays closed and studio paths expose only a login redirect',async()=>{
   const x=setup();assert.equal((await x.app.fetch(post('/api/checkout',{paid:true}),env)).status,503);
-  for(const path of ['/studio','/studio/catalog'])assert.equal((await x.app.fetch(new Request('https://store.example'+path),env)).status,503);
+  for(const path of ['/studio','/studio/catalog']){const r=await x.app.fetch(new Request('https://store.example'+path),env);assert.equal(r.status,303);assert.equal(r.headers.get('location'),'/#studio');}
+  assert.equal((await x.app.fetch(new Request('https://store.example/api/seller/overview'),env)).status,503);
   const catalog=await x.app.fetch(new Request('https://store.example/api/catalog'),env);assert.deepEqual((await catalog.json()).beats,[]);
 });
 test('valid JSON with the wrong shape returns a validation error',async()=>{

@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import { bodyLimit } from 'hono/body-limit';
+import { registerSellerRoutes, type SellerDependencies } from './seller-routes.ts';
 import { createRepository, type Repository } from './repository.ts';
 import { hash, keyedHash, randomToken, seal, unseal, validToken, safeFilename } from './security.ts';
 
@@ -13,13 +14,15 @@ export interface Bindings {
   APP_ORIGIN: string;
   SUPABASE_URL?: string;
   SUPABASE_SECRET_KEY?: string;
+  SUPABASE_PUBLISHABLE_KEY?: string;
+  SELLER_SESSION_SECRET?: string;
   ACCESS_SECRET?: string;
   RESEND_API_KEY?: string;
   MAIL_FROM?: string;
   PRIVATE_FILES?: { get(key: string, options?: { range?: Headers }): Promise<AssetBody | null>; head(key: string): Promise<{ size: number } | null> };
   ASSETS?: { fetch(request: Request): Promise<Response> };
 }
-interface Dependencies {
+interface Dependencies extends SellerDependencies {
   repository?: Repository;
   sendMail?: (job: { id: string; email: string; url: string }) => Promise<void>;
 }
@@ -166,9 +169,10 @@ export function createApp(dependencies: Dependencies = {}) {
     deleteCookie(c, cookieName(c.env), { path: '/', secure: origin(c.env).startsWith('https:') });
     return c.json({ authenticated: false });
   });
+  registerSellerRoutes(app,dependencies);
   app.all('/api/*', c => c.json({ error: 'Endpoint not available.' }, 404));
-  app.all('/studio/*', c => c.text('Seller access is not open yet.', 503));
-  app.all('/studio', c => c.text('Seller access is not open yet.', 503));
+  app.all('/studio/*', c => c.redirect('/#studio',303));
+  app.all('/studio', c => c.redirect('/#studio',303));
   app.all('*', async c => {
     if (!c.env.ASSETS) return c.text('Not found', 404);
     const url = new URL(c.req.url);

@@ -15,6 +15,8 @@ export default defineConfig({
       APP_ORIGIN: bindings.secret(),
       SUPABASE_URL: bindings.secret(),
       SUPABASE_SECRET_KEY: bindings.secret(),
+      SUPABASE_PUBLISHABLE_KEY: bindings.secret(),
+      SELLER_SESSION_SECRET: bindings.secret(),
       ACCESS_SECRET: bindings.secret(),
       RESEND_API_KEY: bindings.secret(),
       MAIL_FROM: bindings.secret()

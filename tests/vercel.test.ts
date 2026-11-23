@@ -28,7 +28,9 @@ test('Vercel public API returns JSON and keeps unconfigured private features clo
   const access = await handler.fetch(new Request('https://store.example/api/access/status'));
   assert.equal((await access.json()).available, false);
   assert.equal((await handler.fetch(new Request('https://store.example/api/access/order'))).status, 503);
-  assert.equal((await handler.fetch(new Request('https://store.example/studio'))).status, 503);
+  const studio=await handler.fetch(new Request('https://store.example/studio'));
+  assert.equal(studio.status,303);assert.equal(studio.headers.get('location'),'/#studio');
+  assert.equal((await handler.fetch(new Request('https://store.example/api/seller/overview'))).status,503);
 });
 
 test('API routing is explicit and does not rewrite arbitrary missing files to the storefront', async () => {
