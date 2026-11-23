@@ -1,0 +1,51 @@
+{
+  "brand": "JT / Joel Tracks",
+  "final": true,
+  "round": 2,
+  "greyscale": false,
+  "brief": "A listening-first store for R&B, Afro and Trap beats. The selected Two Takes mark uses two offset track corners around an open center.",
+  "adjectives": [
+    "direct",
+    "rhythmic",
+    "assured"
+  ],
+  "criteria": "Retain the approved C silhouette, keep the small-size gap open and pair the symbol with readable outlined lettering.",
+  "brand_color": "#1c1d1f",
+  "mockups": [
+    "website",
+    "favicon-tab",
+    "social",
+    "sticker",
+    "tshirt",
+    "app-icon"
+  ],
+  "nav": [
+    "Beats",
+    "Favorites",
+    "Contacts",
+    "Blog"
+  ],
+  "concepts": [
+    {
+      "name": "Two Takes",
+      "symbol": "jt-symbol.svg",
+      "lockup": "jt-horizontal.svg",
+      "stacked": "jt-stacked.svg",
+      "avatar": "jt-symbol.svg",
+      "lockup_on_dark": "jt-horizontal-reversed.svg",
+      "symbol_on_tile": "jt-symbol-reversed.svg",
+      "idea": "Two offset track corners share one open center.",
+      "rationale": [
+        "Approved direction C with its original square silhouette.",
+        "Outlined Bricolage Grotesque lettering needs no font installation.",
+        "Small-size cut follows a two-pixel grid at 16px."
+      ]
+    }
+  ],
+  "recommendation": "Selected direction C has been applied to the frontend. Digital masters and web icons accompany the usage guide. Mockups illustrate possible brand uses only.",
+  "next_steps": [
+    "Keep the symbol upright and preserve the open center.",
+    "Use the horizontal lockup when the name needs to be read.",
+    "Arrange professional trademark clearance before commercial adoption."
+  ]
+}

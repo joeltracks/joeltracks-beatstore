@@ -1,0 +1,42 @@
+[
+  {
+    "width": 1440,
+    "overflow": false,
+    "platforms": 6,
+    "uses": 3,
+    "footerColumns": "315.703px 182.141px 206.438px 315.719px",
+    "footerHeight": 1011.078125,
+    "newsletterType": "email",
+    "reducedMotion": true
+  },
+  {
+    "width": 714,
+    "overflow": false,
+    "platforms": 6,
+    "uses": 3,
+    "footerColumns": "291.297px 291.297px",
+    "footerHeight": 1466.640625,
+    "newsletterType": "email",
+    "reducedMotion": true
+  },
+  {
+    "width": 390,
+    "overflow": false,
+    "platforms": 6,
+    "uses": 3,
+    "footerColumns": "160px 160px",
+    "footerHeight": 1994.765625,
+    "newsletterType": "email",
+    "reducedMotion": true
+  },
+  {
+    "width": 320,
+    "overflow": false,
+    "platforms": 6,
+    "uses": 3,
+    "footerColumns": "129px 129px",
+    "footerHeight": 2109.03125,
+    "newsletterType": "email",
+    "reducedMotion": true
+  }
+]

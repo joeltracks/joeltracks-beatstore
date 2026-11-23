@@ -1,0 +1,296 @@
+/* Type rhythm from google-fonts. Labels use a 14px readability floor. */
+:root {
+  --font-display:"Bricolage Grotesque",Arial,sans-serif;
+  --font-text:"DM Sans",Arial,sans-serif;
+  --font-size-sm:.875rem;
+  --font-size-base:1rem;
+  --font-size-lg:1.2rem;
+  --font-size-xl:1.44rem;
+  --font-size-2xl:1.728rem;
+  --font-size-3xl:2.0736rem;
+  --muted:#50534c;
+  --header-height:88px;
+  --dock-progress:0;
+  --page-progress:0;
+  --hero-progress:0;
+}
+html {scroll-padding-block:calc(var(--header-height) + 20px) 126px}
+h1,h2,h3 {font-optical-sizing:auto}
+h1 {font-family:var(--font-display);font-weight:600;line-height:1.06}
+.brand-name {font-family:var(--font-display);font-weight:600;font-size:21px}
+.brand-name>span {font-family:var(--font-text);font-size:13px;line-height:1.4}
+.nav a,.cart-link,.btn,.text-link {font-size:15px}
+.btn {font-weight:600}
+.intro-copy h1 {font-size:clamp(48px,5.3vw,76px);font-weight:600;line-height:1.04;letter-spacing:-.035em}
+.intro-copy h1 em {font-style:normal;font-weight:600}
+.intro-description {font-size:18px;line-height:1.65;max-width:48ch}
+.section-label,.subtle-label,.listening-note {font-size:14px}
+.featured-info h2 {font-family:var(--font-display);font-size:26px;font-weight:600}
+.featured-info .subtle-label,.featured-info p {font-size:14px}
+.section-head h2 {font-family:var(--font-display);font-size:32px;font-weight:600}
+.catalog-count,.sort-label,.sort,.tab {font-size:14px}
+.tab {font-weight:500}
+.search-field input {font-size:16px}
+.tag-filter>span,.tag {font-size:14px}
+.track-tags .tag {font-size:13px;min-height:32px}
+.list-head {font-size:14px}
+.track {min-height:86px}
+.track-name b {font-size:17px;font-weight:600}
+.track-name small,.meta {font-size:14px;line-height:1.5}
+.price {min-height:44px;font-size:15px;font-weight:600}
+.player-track .track-name b {font-size:16px}
+.player-track .track-name small {font-size:13px}
+.time {font-size:12px}
+.player-buy {font-size:14px}
+.page-title h1 {font-size:clamp(36px,4.4vw,60px);font-weight:600}
+.page-title>p {font-size:17px;line-height:1.65}
+.license-card strong {font-family:var(--font-display);font-weight:600}
+.license-card p,.license-includes,.license-notes p {font-size:15px}
+.license-notes h2 {font-size:24px;font-weight:600}
+.modal-head h2 {font-family:var(--font-display);font-size:32px;font-weight:600;line-height:1.15}
+.modal-head p,.demo-note,.prototype-label {font-size:14px;line-height:1.6}
+.option-description b {font-size:16px}
+.option-description small,.license-beat p,.custom-option p,.custom-option b {font-size:14px}
+.license-option strong {font-size:20px}
+.custom-option .text-link {font-size:14px}
+.license-dialog-footer>span {font-size:14px}
+.checkout-steps {font-size:14px}
+.cart-beat h2 {font-family:var(--font-display);font-size:25px;font-weight:600}
+.cart-beat>p,.cart-license,.cart-beat .text-link {font-size:14px}
+.order-summary>h2 {font-size:24px;font-weight:600}
+.summary-item,.sum-row {font-size:15px}
+.summary-item small,.summary-foot,.sum-row.total small {font-size:13px}
+.checkout-section h2 {font-size:23px;font-weight:600}
+.section-description,.field {font-size:15px}
+.agreement summary {font-size:15px}
+.agreement-body {font-size:14px;line-height:1.65}
+.callout {font-size:14px}
+.demo-check {font-size:15px;line-height:1.65}
+.field small,.footer-inner nav a {font-size:14px}
+.workspace-title h1 {font-family:var(--font-display);font-weight:600;font-size:34px}
+.workspace-title p,.data-context,.sidebar-label,.sidebar-bottom .text-link {font-size:14px}
+.studio-sidebar nav a {font-size:15px}
+.studio-header-label,.seller-identity,.seller-identity small,.workspace-disclosure {font-size:14px}
+.dashboard-stats article>span,.dashboard-stats small {font-size:14px}
+.dashboard-stats strong {font-family:var(--font-display);font-size:36px;font-weight:600}
+.panel-heading h2 {font-size:19px;font-weight:600}
+.panel-heading p,.panel-heading .muted,.panel-heading .text-link {font-size:13px}
+.metric-switch button {font-size:13px;min-height:36px}
+.chart-data,.bar-label,.genre-panel .text-link {font-size:14px}
+.chart-footer>.text-link {font-size:13px}
+.top-beat b,.top-beat>span:last-child,.next-actions>a {font-size:15px}
+.top-beat small,.next-actions small,.top-beat .rank {font-size:13px}
+.top-beat {min-height:80px}
+.data-table {font-size:15px}
+.data-table th,.data-table .text-link {font-size:14px}
+.data-table .track-name b {font-size:15px}
+.data-table .track-name small,.data-table .table-sub {font-size:13px}
+.status-pill {font-size:13px}
+.local-bar {font-size:15px}
+.editor-columns h3 {font-size:18px;font-weight:600}
+.upload-field b {font-size:15px}
+.upload-field small,.file-preview {font-size:14px}
+.journal-card h2 {font-family:var(--font-display);font-weight:600;font-size:28px}
+.journal-card p,.journal-card .text-link {font-size:16px}
+.article-title h1 {font-size:52px}
+.article-body p {font-size:18px}
+.contact-topics h2,.contact-form h2 {font-size:26px;font-weight:600}
+.contact-topics p {font-size:16px}
+
+/* Floating surfaces retain their layout footprint as their boundaries adapt. */
+#header {
+  position:sticky;
+  top:0;
+  isolation:isolate;
+  background:transparent;
+  border-bottom:0;
+}
+#header::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:rgb(250 250 248 / .94);
+  backdrop-filter:blur(16px) saturate(130%);
+  border:1px solid rgb(28 29 31 / .09);
+  border-radius:20px;
+  opacity:var(--dock-progress);
+  transform:scaleX(calc(1 - var(--dock-progress)*.025)) scaleY(calc(1 - var(--dock-progress)*.12));
+  box-shadow:0 8px 28px rgb(28 29 31 / .07);
+  pointer-events:none;
+}
+.topbar {height:var(--header-height)}
+#header::after {
+  content:"";
+  position:absolute;
+  left:calc(var(--gut) + 4px);
+  right:calc(var(--gut) + 4px);
+  bottom:4px;
+  height:2px;
+  border-radius:2px;
+  background:var(--accent);
+  transform:scaleX(var(--page-progress));
+  transform-origin:left;
+  pointer-events:none;
+}
+body[data-view=studio] #header {background:transparent}
+body[data-view=studio] .topbar {height:var(--header-height)}
+.mobile-navigation {
+  background:rgb(250 250 248 / .98);
+  backdrop-filter:blur(16px);
+  border-radius:0 0 20px 20px;
+  padding-top:8px;
+}
+.catalog-tools {
+  position:sticky;
+  top:var(--header-height);
+  z-index:4;
+  isolation:isolate;
+  padding-top:12px;
+  margin-top:-12px;
+}
+.catalog-tools::before {
+  content:"";
+  position:absolute;
+  inset:0 -16px 0;
+  z-index:-1;
+  border-radius:16px;
+  background:rgb(250 250 248 / .97);
+  backdrop-filter:blur(16px);
+  box-shadow:0 8px 22px rgb(28 29 31 / .07);
+  opacity:var(--tools-docked,0);
+  pointer-events:none;
+}
+.featured-art {
+  border-radius:calc(5px + var(--hero-progress)*20px);
+}
+.featured-art>img {
+  transform:translate3d(0,calc(var(--hero-progress)*8px),0) scale(calc(1 + var(--hero-progress)*.045));
+}
+#player:not(:empty) {
+  background:transparent;
+  backdrop-filter:none;
+  border-top:0;
+  isolation:isolate;
+}
+#player::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:rgb(250 250 248 / .96);
+  backdrop-filter:blur(16px);
+  border:1px solid rgb(28 29 31 / .1);
+  border-radius:calc(var(--dock-progress)*18px);
+  transform:scaleX(calc(1 - var(--dock-progress)*.025)) scaleY(calc(1 - var(--dock-progress)*.12));
+  box-shadow:0 -4px 24px rgb(28 29 31 / .05);
+  pointer-events:none;
+}
+.studio-sidebar>div:first-child {position:sticky;top:calc(var(--header-height) + 24px)}
+.chart-panel,.workspace-panel,.journal-card,.license-card {scroll-margin-top:calc(var(--header-height) + 24px)}
+button:active:not(:disabled),.btn:active {transform:scale(.97);transition:transform 80ms ease-out}
+.cover-play:active {transform:scale(.96)}
+
+@media(hover:hover) {
+  .track:hover {background:#e0e1d9}
+  .featured-art:hover>img {transform:translate3d(0,calc(var(--hero-progress)*8px),0) scale(calc(1.025 + var(--hero-progress)*.045))}
+}
+@media(max-width:1150px) {
+  .studio-sidebar nav a {font-size:14px}
+  .dashboard-stats strong {font-size:32px}
+  .track-tags .tag {max-width:100px}
+  .list-head,.track {grid-template-columns:minmax(200px,1.6fr) minmax(110px,1fr) 48px 65px 44px 44px 90px}
+}
+@media(max-width:900px) {
+  :root {--header-height:76px}
+  .nav {display:none}
+  .menu-toggle {display:grid}
+  .brand-name {font-size:20px}
+  .intro-copy h1 {font-size:52px}
+  .intro-description {font-size:17px}
+  .intro-actions .text-link {font-size:14px}
+  .list-head,.track {grid-template-columns:minmax(180px,1fr) 52px 66px 44px 90px}
+  .catalog-tools {top:var(--header-height)}
+}
+@media(max-width:640px) {
+  :root {--header-height:72px}
+  .store-intro {padding-top:28px}
+  .intro-copy h1 {font-size:clamp(44px,11vw,58px)}
+  .intro-description {font-size:17px}
+  .intro-actions {gap:12px 20px}
+  .intro-actions .text-link {font-size:15px}
+  .section-head h2 {font-size:27px}
+  .catalog-count {font-size:14px}
+  .sort {max-width:140px;font-size:13px}
+  .tab {font-size:14px;padding-inline:5px;white-space:normal;line-height:1.2}
+  .tag {font-size:13px}
+  .tags {flex-wrap:nowrap;overflow-x:auto;max-width:100%;gap:4px}
+  .tag {flex:none;white-space:nowrap}
+  .tag-filter {display:block;margin-block:8px 0;padding-bottom:6px}
+  .catalog-tools::before {inset:0 -10px 0;border-radius:12px}
+  .list-head,.track {grid-template-columns:minmax(0,1fr) 36px 44px 78px;gap:4px}
+  .list-head {font-size:13px}
+  .track-name b {font-size:15px}
+  .track-name small,.meta {font-size:13px}
+  .track .price {font-size:14px;padding-inline:8px}
+  .player-track .track-name b {font-size:15px}
+  .player-track .track-name small {font-size:12px}
+  .player-track {padding-right:128px}
+  .page-title h1 {font-size:38px}
+  .page-title>p {font-size:16px}
+  .cart-beat h2 {font-size:22px}
+  .cart-beat>p,.cart-license,.cart-beat .text-link {font-size:13px}
+  .checkout-steps {gap:8px;font-size:12px}
+  .checkout-section h2 {font-size:22px}
+  .agreement summary {font-size:14px}
+  .modal-head h2 {font-size:29px}
+  .option-description b {font-size:16px}
+  .license-option strong {font-size:20px}
+  .workspace-title h1 {font-size:30px}
+  .workspace-title p {font-size:15px}
+  .studio-sidebar>div:first-child {position:static}
+  .studio-sidebar nav a {font-size:12px}
+  .workspace {padding-inline:16px}
+  .dashboard-stats article>span,.dashboard-stats small {font-size:13px}
+  .dashboard-stats strong {font-size:32px}
+  .panel-heading h2 {font-size:19px}
+  .metric-switch button {font-size:13px;min-height:44px}
+  .local-bar {font-size:14px}
+  .data-context {font-size:13px}
+  .contact-topics p,.article-body p {font-size:17px}
+  .article-title h1 {font-size:38px}
+}
+@media(max-width:360px) {
+  .intro-copy h1 {font-size:44px}
+  .brand-name {font-size:18px}
+  .track-name b {font-size:14px}
+  .track-title {gap:7px}
+  .list-head,.track {grid-template-columns:minmax(0,1fr) 32px 40px 72px;gap:2px}
+  .track .price {font-size:13px;padding-inline:6px}
+  .checkout-steps {font-size:11px;gap:5px}
+  .license-option {gap:8px}
+}
+@media(prefers-reduced-motion:reduce) {
+  .featured-art {border-radius:8px}
+  .featured-art>img,.featured-art:hover>img {transform:none}
+  #header::before,#player::before {transform:none}
+}
+@media(prefers-reduced-transparency:reduce) {
+  #header::before,#player::before,.catalog-tools::before,.mobile-navigation {background:var(--paper);backdrop-filter:none}
+}
+@media(prefers-contrast:more) {
+  #header::before,#player::before,.catalog-tools::before {background:var(--paper);backdrop-filter:none;border-color:var(--ink)}
+}
+
+.tag[aria-pressed=true],.clear-tag,.mobile-navigation [aria-current] {color:#a33e14}
+.track {scroll-margin-top:calc(var(--header-height) + var(--catalog-controls-height,160px) + 16px)}
+
+/* Approved C identity. The complete lockup is outlined for consistent rendering. */
+.brand {gap:0;min-height:44px}
+.jt-logo-lockup {width:198px;height:48px;object-fit:contain}
+.footer-inner .jt-logo-lockup {width:149px;height:36px}
+@media(max-width:640px) {
+  .jt-logo-lockup {width:174px;height:42px}
+  .footer-inner .jt-logo-lockup {width:140px;height:34px}
+}
+

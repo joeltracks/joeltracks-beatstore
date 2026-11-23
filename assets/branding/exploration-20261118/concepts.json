@@ -1,0 +1,37 @@
+[
+  {
+    "key": "a-counterpoint",
+    "name": "Counterpoint",
+    "style": "Geometric monogram",
+    "idea": "A shared bar connects J and T into one compact signature.",
+    "risk": "The most restrained direction; less expressive than the script."
+  },
+  {
+    "key": "b-imprint",
+    "name": "Imprint",
+    "style": "Editorial serif",
+    "idea": "Contrasting serif lettering gives JT an independent record-label character.",
+    "risk": "Fine serif details need a simplified cut for tiny icons."
+  },
+  {
+    "key": "c-cutline",
+    "name": "Cutline",
+    "style": "Industrial custom lettering",
+    "idea": "A drawn, chamfered alphabet creates a bold nameplate for the catalog.",
+    "risk": "The hardest-edged option may feel less intimate for R&B."
+  },
+  {
+    "key": "d-signed",
+    "name": "Signed",
+    "style": "Script signature",
+    "idea": "Flowing lettering and one original sweep put the producer behind the name.",
+    "risk": "The full signature needs more width at small sizes."
+  },
+  {
+    "key": "e-pocket",
+    "name": "Pocket",
+    "style": "Rounded lowercase",
+    "idea": "A rounded j/t pairing gives the store a warm, approachable rhythm.",
+    "risk": "Its softer character is less severe than the industrial option."
+  }
+]

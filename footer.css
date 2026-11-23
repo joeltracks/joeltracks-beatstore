@@ -1,0 +1,68 @@
+/* JT adaptation of the measured release strip and four-column reference footer. */
+body[data-view=store] #footer {background:var(--color-neutral-950-2);border-color:var(--color-border);color:var(--color-text);font-family:var(--font-sans)}
+.release-band {background:linear-gradient(180deg,var(--color-primary-foreground),var(--color-background) 90%);border-bottom:var(--border-width) solid var(--color-border);padding-block:var(--space-15) var(--space-10)}
+.release-heading {display:flex;justify-content:space-between;align-items:end;gap:var(--space-7_5)}
+.release-heading>div {max-width:70ch}
+.release-heading .section-label {font-size:var(--text-caption);margin-bottom:var(--space-2_5)}
+.release-heading h2 {font-size:var(--text-h2);font-weight:600;line-height:var(--text-h2--line-height);color:var(--color-heading)}
+.release-heading p:not(.section-label) {font-size:var(--text-caption);line-height:var(--text-body--line-height);color:var(--color-text);margin-top:var(--space-2_5)}
+.release-heading>.text-link {flex:none;min-height:44px;font-size:var(--text-caption);color:var(--color-primary)}
+.platform-label {font-size:var(--text-small);color:var(--color-text-muted);margin-top:var(--space-7_5)}
+.release-platforms {display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--space-5);list-style:none;padding:var(--space-5) 0;margin:0 0 var(--space-7_5);border-bottom:var(--border-width) solid var(--color-border)}
+.release-platforms li {font-size:var(--text-h4);font-weight:600;line-height:var(--text-h4--line-height);color:var(--color-heading);padding-block:var(--space-2_5);white-space:nowrap}
+.release-uses {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-7_5)}
+.release-use {display:grid;grid-template-columns:24px minmax(0,1fr);gap:var(--space-2_5) var(--space-3_75);align-content:start}
+.release-use>svg {grid-row:1/3;color:var(--color-primary);transition:transform var(--duration-fast) var(--ease-standard)}
+.release-use h3 {font-size:var(--text-body);font-weight:600;line-height:var(--text-body--line-height);color:var(--color-heading)}
+.release-use p {font-size:var(--text-caption);line-height:var(--text-body--line-height);color:var(--color-text-muted)}
+.release-footnote {font-size:var(--text-small);line-height:var(--text-body--line-height);color:var(--color-text-muted);margin-top:var(--space-7_5);max-width:105ch}
+.release-footnote a {text-decoration:underline;text-underline-offset:.2em;color:var(--color-text)}
+.site-footer-main {padding-top:var(--space-12_5)}
+.site-footer-grid {display:grid;grid-template-columns:1.3fr .75fr .85fr 1.3fr;gap:var(--space-10);padding-bottom:var(--space-10)}
+.site-footer-column {min-width:0;display:flex;flex-direction:column;align-items:start}
+.site-footer-column h2 {font-size:var(--text-h4);font-weight:600;line-height:var(--text-h4--line-height);color:var(--color-heading);margin-bottom:var(--space-3_75)}
+.site-footer-column>p {font-size:var(--text-caption);line-height:var(--text-body--line-height);color:var(--color-text-muted)}
+.footer-about .jt-logo-lockup {width:min(100%,calc(var(--space-5)*11));height:auto}
+.footer-about>p {margin-top:var(--space-5);max-width:32ch}
+.footer-about>.text-link {margin-top:var(--space-3_75);font-size:var(--text-caption);min-height:44px;color:var(--color-primary)}
+nav.site-footer-column>a {display:inline-flex;align-items:center;min-height:44px;font-size:var(--text-caption);line-height:var(--text-caption--line-height);color:var(--color-text-muted)}
+.footer-newsletter>p {margin-bottom:var(--space-5)}
+#footer-newsletter {width:100%}
+#footer-newsletter label {font-size:var(--text-caption);color:var(--color-text);display:block;margin-bottom:var(--space-2_5)}
+.footer-email-row {display:flex;flex-direction:column;gap:var(--space-2_5)}
+.footer-email-row input {width:100%;min-height:48px;padding:var(--space-2_5) var(--space-3_75);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface-raised);font-size:var(--text-body);color:var(--color-heading)}
+.footer-email-row input::placeholder {color:var(--color-text-muted)}
+.footer-email-row .btn {min-height:48px;font-size:var(--text-caption);width:100%;justify-content:center}
+.footer-form-note,.footer-signup-status {font-size:var(--text-small);line-height:var(--text-body--line-height);margin-top:var(--space-2_5);color:var(--color-text-muted)}
+.footer-signup-status {color:var(--color-primary)}
+.footer-signup-status:empty {margin:0}
+.site-footer-bottom {display:flex;justify-content:space-between;align-items:center;gap:var(--space-5);padding-block:var(--space-5);border-top:var(--border-width) solid var(--color-border)}
+.site-footer-bottom p,.site-footer-bottom a {font-size:var(--text-small);line-height:var(--text-small--line-height);color:var(--color-text-muted)}
+.site-footer-bottom nav {display:flex;gap:var(--space-5);flex-wrap:wrap}
+.site-footer-bottom a {display:inline-flex;align-items:center;min-height:44px}
+@media(hover:hover){
+  nav.site-footer-column>a:hover,.site-footer-bottom a:hover,.release-footnote a:hover {color:var(--color-heading);text-decoration:underline;text-underline-offset:.2em}
+  .release-use:hover>svg {transform:translateY(-2px)}
+}
+@media(max-width:1000px){
+  .site-footer-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-10) var(--space-15)}
+  .release-platforms {grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2_5) var(--space-5)}
+  .release-heading {align-items:start;flex-direction:column;gap:var(--space-2_5)}
+  .release-uses {gap:var(--space-5)}
+}
+@media(max-width:640px){
+  .release-band {padding-block:var(--space-10)}
+  .release-platforms {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .release-platforms li {font-size:var(--text-body)}
+  .release-uses {grid-template-columns:1fr;gap:var(--space-7_5)}
+  .site-footer-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-7_5);padding-bottom:var(--space-7_5)}
+  .footer-about,.footer-newsletter {grid-column:1/-1;grid-row:auto}
+  nav.site-footer-column {grid-column:auto}
+  .footer-about>p {max-width:45ch}
+  .site-footer-bottom {align-items:start;flex-direction:column;gap:var(--space-2_5)}
+  .site-footer-main {padding-top:var(--space-10)}
+}
+@media(prefers-reduced-motion:reduce){
+  .release-use>svg {transition:none}
+  .release-use:hover>svg {transform:none}
+}

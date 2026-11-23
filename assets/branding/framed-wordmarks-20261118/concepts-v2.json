@@ -1,0 +1,42 @@
+[
+  {
+    "key": "a-open-frame",
+    "name": "Open Frame",
+    "style": "Open corner brackets",
+    "idea": "Precisely spaced lettering with a frame that leaves room to breathe.",
+    "width": 960,
+    "file": "a-open-frame-v2.svg"
+  },
+  {
+    "key": "b-soft-seal",
+    "name": "Soft Seal",
+    "style": "Filled capsule",
+    "idea": "Soft serif lettering cut directly into a generous capsule.",
+    "width": 960,
+    "file": "b-soft-seal-v2.svg"
+  },
+  {
+    "key": "c-session-label",
+    "name": "Session Label",
+    "style": "Stepped frame",
+    "idea": "Condensed lettering in a stepped frame inspired by a session label.",
+    "width": 640,
+    "file": "c-session-label-v2.svg"
+  },
+  {
+    "key": "d-orbit",
+    "name": "Orbit",
+    "style": "Open oval signature",
+    "idea": "A flowing full-name signature wrapped by one tapered orbit.",
+    "width": 960,
+    "file": "d-orbit-v2.svg"
+  },
+  {
+    "key": "e-index",
+    "name": "Index",
+    "style": "Asymmetric tab",
+    "idea": "A single raised tab gives the full name a recognizable edge.",
+    "width": 960,
+    "file": "e-index-v2.svg"
+  }
+]

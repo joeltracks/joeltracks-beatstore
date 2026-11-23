@@ -1,0 +1,70 @@
+{
+ "url": "http://127.0.0.1:4173/#store",
+ "views": {
+  "desktop": {
+   "width": 1440,
+   "height": 900,
+   "navH": 88,
+   "scrollHeight": 2305,
+   "screens": 2.56,
+   "sections": [
+    {
+     "n": 1,
+     "tag": "section",
+     "id": "",
+     "cls": "shell store-intro",
+     "top": 88,
+     "h": 573,
+     "hScreens": 0.64,
+     "offGrid": 573,
+     "tiles": [
+      {
+       "file": "desktop-sec-01-a.jpg",
+       "scrollY": 88
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "tag": "section",
+     "id": "beat-catalog",
+     "cls": "shell catalog",
+     "top": 661,
+     "h": 1449,
+     "hScreens": 1.61,
+     "offGrid": 549,
+     "tiles": [
+      {
+       "file": "desktop-sec-02-a.jpg",
+       "scrollY": 661
+      },
+      {
+       "file": "desktop-sec-02-b.jpg",
+       "scrollY": 1210
+      }
+     ]
+    },
+    {
+     "n": 3,
+     "tag": "footer",
+     "id": "footer",
+     "cls": "",
+     "top": 2110,
+     "h": 101,
+     "hScreens": 0.11,
+     "offGrid": 101,
+     "tiles": [
+      {
+       "file": "desktop-sec-03-a.jpg",
+       "scrollY": 1405,
+       "cutTop": 705,
+       "height": 101
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "at": "2026-11-17T20:51:36.830Z"
+}

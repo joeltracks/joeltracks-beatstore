@@ -1,0 +1,26 @@
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local browser profiles, caches, and installed design-tool dependencies
+/.taste-skill/chrome-*/
+/.taste-skill/font-tools/
+/.taste-skill/vector-tools/
+**/__pycache__/
+*.py[cod]
+node_modules/
+.venv/
+venv/
+
+# Temporary output and machine-specific files
+/tmp/
+*.log
+*.crdownload
+.DS_Store
+Thumbs.db
+Desktop.ini

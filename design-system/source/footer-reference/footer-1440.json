@@ -1,0 +1,134 @@
+{
+  "checked": "2026-11-18",
+  "url": "https://ear2thabeat.com/beat-store/",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "footer": {
+    "tag": "FOOTER",
+    "text": "Ear2ThaBeat.com is a website for rappers, singers & artists of any kind to buy high qualit",
+    "width": 1440,
+    "height": 319,
+    "background": "rgb(11, 11, 11)",
+    "image": "none",
+    "font": "Poppins, sans-serif",
+    "size": "16px",
+    "weight": "400",
+    "lineHeight": "28px",
+    "padding": "0px",
+    "gap": "normal",
+    "columns": "none"
+  },
+  "headings": [
+    {
+      "tag": "H4",
+      "text": "About Us",
+      "width": 223.609375,
+      "height": 18,
+      "background": "rgba(0, 0, 0, 0)",
+      "image": "none",
+      "font": "Poppins, sans-serif",
+      "size": "18px",
+      "weight": "600",
+      "lineHeight": "18px",
+      "padding": "0px",
+      "gap": "normal",
+      "columns": "none"
+    },
+    {
+      "tag": "H4",
+      "text": "Navigation",
+      "width": 186.34375,
+      "height": 18,
+      "background": "rgba(0, 0, 0, 0)",
+      "image": "none",
+      "font": "Poppins, sans-serif",
+      "size": "18px",
+      "weight": "600",
+      "lineHeight": "18px",
+      "padding": "0px",
+      "gap": "normal",
+      "columns": "none"
+    },
+    {
+      "tag": "H4",
+      "text": "Join the newsletter!",
+      "width": 260.890625,
+      "height": 18,
+      "background": "rgba(0, 0, 0, 0)",
+      "image": "none",
+      "font": "Poppins, sans-serif",
+      "size": "18px",
+      "weight": "600",
+      "lineHeight": "18px",
+      "padding": "0px",
+      "gap": "normal",
+      "columns": "none"
+    }
+  ],
+  "columns": [
+    {
+      "tag": "DIV",
+      "text": "Ear2ThaBeat.com is a website for rappers, singers & artists of any kind to buy high qualit",
+      "width": 1140,
+      "height": 288,
+      "background": "rgba(0, 0, 0, 0)",
+      "image": "none",
+      "font": "Poppins, sans-serif",
+      "size": "16px",
+      "weight": "400",
+      "lineHeight": "28px",
+      "padding": "30px 0px",
+      "gap": "5%",
+      "columns": "none"
+    },
+    {
+      "tag": "DIV",
+      "text": "(c) 2025 Ear2ThaBeat.com – all rights reserved",
+      "width": 1140,
+      "height": 41,
+      "background": "rgba(0, 0, 0, 0)",
+      "image": "none",
+      "font": "Poppins, sans-serif",
+      "size": "16px",
+      "weight": "400",
+      "lineHeight": "28px",
+      "padding": "10px 0px",
+      "gap": "20px",
+      "columns": "none"
+    }
+  ],
+  "release": {
+    "heading": {
+      "tag": "H2",
+      "text": "Release & Sell Your Songs Everywhere!",
+      "width": 1140,
+      "height": 24,
+      "background": "rgba(0, 0, 0, 0)",
+      "image": "none",
+      "font": "Poppins, sans-serif",
+      "size": "24px",
+      "weight": "600",
+      "lineHeight": "24px",
+      "padding": "0px",
+      "gap": "normal",
+      "columns": "none"
+    },
+    "container": {
+      "tag": "DIV",
+      "text": "Release & Sell Your Songs Everywhere!",
+      "width": 1420,
+      "height": 182,
+      "background": "rgba(0, 0, 0, 0)",
+      "image": "linear-gradient(178deg, rgb(26, 80, 78) 0%, rgb(0, 0, 0) 91%)",
+      "font": "Poppins, sans-serif",
+      "size": "16px",
+      "weight": "300",
+      "lineHeight": "28px",
+      "padding": "0px",
+      "gap": "normal",
+      "columns": "none"
+    }
+  }
+}

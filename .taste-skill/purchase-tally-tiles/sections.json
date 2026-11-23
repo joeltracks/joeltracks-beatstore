@@ -1,0 +1,62 @@
+{
+ "url": "http://127.0.0.1:4173/#studio-payments",
+ "views": {
+  "desktop": {
+   "width": 1440,
+   "height": 900,
+   "navH": 88,
+   "scrollHeight": 3184,
+   "screens": 3.54,
+   "sections": [
+    {
+     "n": 1,
+     "tag": "div",
+     "id": "",
+     "cls": "studio-layout",
+     "top": 88,
+     "h": 3019,
+     "hScreens": 3.35,
+     "offGrid": 319,
+     "tiles": [
+      {
+       "file": "desktop-sec-01-a.jpg",
+       "scrollY": 88
+      },
+      {
+       "file": "desktop-sec-01-b.jpg",
+       "scrollY": 988
+      },
+      {
+       "file": "desktop-sec-01-c.jpg",
+       "scrollY": 1888
+      },
+      {
+       "file": "desktop-sec-01-d.jpg",
+       "scrollY": 2207
+      }
+     ]
+    },
+    {
+     "n": 2,
+     "tag": "footer",
+     "id": "footer",
+     "cls": "",
+     "top": 3107,
+     "h": 77,
+     "hScreens": 0.09,
+     "offGrid": 77,
+     "tiles": [
+      {
+       "file": "desktop-sec-02-a.jpg",
+       "scrollY": 2284,
+       "cutTop": 823,
+       "height": 77
+      }
+     ]
+    }
+   ],
+   "consoleErrors": []
+  }
+ },
+ "at": "2026-11-17T21:18:13.996Z"
+}

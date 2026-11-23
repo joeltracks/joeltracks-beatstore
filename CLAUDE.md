@@ -1,0 +1,11 @@
+## Design system
+
+Before any UI work, read DESIGN.md. Build new customer-facing UI from design-system/tokens.css, or the Tailwind theme in design-system/theme.css. Add missing tokens in roles.json and rebuild. Check new screens against design-system/preview.html. The reference-inspired storefront is scoped to customer views; preserve the seller workspace unless a change is requested. Existing navy dashboard styles are retained.
+
+The seller requested the dashboard usage schedule in customer license drafts on November 18, 2026. `dashboardLicenseDefaults` supplies empty legacy fields; nonempty saved dashboard wording takes precedence. All public license displays and checkout read the same tier settings. Custom terms remain negotiated. Legal definitions and lawyer review are still pending. This project remains a frontend prototype with local mock integrations.
+
+The approved focused refinement is the final `refinement.css` layer. Preserve its compact catalog, stateful Tags & sort disclosure at 900px and below, 44px row controls, restrained route motion and contained seller sidebar. Read `.taste-skill/unslop-refinement/REVIEW.md` before overriding it. The logo, type families, palette, section order and license terms were explicitly retained.
+
+The seller subsequently selected B — Soft Seal from the framed-wordmark concepts. The active logo is now `assets/branding/soft-seal/joel-tracks.svg`, a full-name capsule without JT initials. Header, footer and seller branding use it; small icons use its simplified capsule perimeter. Preserve this later selection. See `assets/branding/soft-seal/USAGE.md`. Interface font families, palette, features and license terms are unchanged.
+
+The seller added automatic bulk deals: exactly 2 valid cart beats receive 15% off; 3+ receive 25%. `bulk-deals.js` owns the integer-cent calculation; `cartPricing()` supplies header/cart/checkout totals and per-beat agreement fees. Do not alter base tier prices or royalty/usage terms to represent a discount. The seller then moved the strip directly above the persistent player and removed its pause/play button. Preserve that placement: ResizeObserver measures the player and strip; bottom padding and notices clear the whole dock. Keep hover/focus pause, reduced-motion static copy and no seller-dashboard banner. See `.taste-skill/bulk-deals-review/REVIEW.md`.

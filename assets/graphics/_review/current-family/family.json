@@ -1,0 +1,329 @@
+{
+  "fingerprint": {
+    "icons": 15,
+    "libraries": [],
+    "canvas": "24",
+    "style": "line",
+    "drawnAs": "strokes",
+    "strokeAt24": 1.65,
+    "lineAt24FromPixels": 1.25,
+    "cap": "round",
+    "join": "round",
+    "radius": 7,
+    "radiusPerStroke": 4.24,
+    "keyline": null,
+    "step": "1",
+    "paddingAt24": 4,
+    "sizes": [
+      16,
+      18,
+      19,
+      20,
+      21,
+      22,
+      27
+    ]
+  },
+  "icons": [
+    {
+      "size": 19,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": null,
+        "paddingAt24": 2.17
+      },
+      "ink": {
+        "coverage": 0.16493055555555555,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 18,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 3.18
+      },
+      "ink": {
+        "coverage": 0.08702256944444445,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 16,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4.18
+      },
+      "ink": {
+        "coverage": 0.1130642361111111,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 27,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "fills",
+        "stroke": null,
+        "strokeAt24": null,
+        "cap": null,
+        "join": null,
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4
+      },
+      "ink": {
+        "coverage": 0.1332465277777778,
+        "line24": null
+      }
+    },
+    {
+      "size": 22,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4.18
+      },
+      "ink": {
+        "coverage": 0.0759548611111111,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 19,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": null,
+        "paddingAt24": 2.98
+      },
+      "ink": {
+        "coverage": 0.1351996527777778,
+        "line24": 1.5833333333333335
+      }
+    },
+    {
+      "size": 18,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "fills",
+        "stroke": null,
+        "strokeAt24": null,
+        "cap": null,
+        "join": null,
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4
+      },
+      "ink": {
+        "coverage": 0.1332465277777778,
+        "line24": null
+      }
+    },
+    {
+      "size": 20,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": 4.7,
+        "keyline": null,
+        "step": null,
+        "paddingAt24": 2.37
+      },
+      "ink": {
+        "coverage": 0.1467013888888889,
+        "line24": 1.5833333333333335
+      }
+    },
+    {
+      "size": 20,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4.18
+      },
+      "ink": {
+        "coverage": 0.0759548611111111,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 16,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 5.18
+      },
+      "ink": {
+        "coverage": 0.050130208333333336,
+        "line24": 1.5833333333333335
+      }
+    },
+    {
+      "size": 20,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "both",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4.18
+      },
+      "ink": {
+        "coverage": 0.17317708333333334,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 21,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "fills",
+        "stroke": null,
+        "strokeAt24": null,
+        "cap": null,
+        "join": null,
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4
+      },
+      "ink": {
+        "coverage": 0.1332465277777778,
+        "line24": null
+      }
+    },
+    {
+      "size": 20,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "both",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4.18
+      },
+      "ink": {
+        "coverage": 0.17317708333333334,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 20,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": 7,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 2.17
+      },
+      "ink": {
+        "coverage": 0.1648220486111111,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": 18,
+      "from": "http://127.0.0.1:4173/#store",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 4.18
+      },
+      "ink": {
+        "coverage": 0.0759548611111111,
+        "line24": 1.25
+      }
+    }
+  ]
+}

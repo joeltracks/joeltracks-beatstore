@@ -1,0 +1,30 @@
+/* Automatic bulk offers, using the existing storefront tokens. */
+#bulk-banner {position:fixed;left:0;right:0;bottom:var(--player-dock-height,88px);z-index:7;display:flex;align-items:center;min-height:32px;background:var(--color-primary);color:var(--color-primary-foreground);font-size:var(--text-caption);line-height:var(--text-caption--line-height);overflow:hidden}
+#bulk-banner:empty,body[data-view=studio] #bulk-banner {display:none}
+body[data-view=store] {padding-bottom:calc(var(--listening-dock-height,132px) + var(--space-2))}
+body[data-view=store] #notice {bottom:calc(var(--listening-dock-height,132px) + var(--space-4))}
+html {scroll-padding-bottom:calc(var(--listening-dock-height,132px) + var(--space-4))}
+.bulk-ticker-window {overflow:hidden;flex:1;min-width:0}
+.bulk-ticker-track {display:flex;width:max-content;animation:bulk-offers-scroll 26s linear infinite;will-change:transform}
+.bulk-ticker-group {display:flex;align-items:center;justify-content:space-around;gap:var(--space-8);padding-inline:var(--space-4) var(--space-8);width:max-content;min-width:100vw;flex:none;white-space:nowrap}
+.bulk-ticker-group strong {font-weight:600}
+.bulk-ticker-separator {opacity:.55}
+#bulk-banner:focus-visible {outline:2px solid var(--color-primary-foreground);outline-offset:-4px}
+#bulk-banner:hover .bulk-ticker-track,#bulk-banner:focus-within .bulk-ticker-track {animation-play-state:paused}
+@keyframes bulk-offers-scroll {to {transform:translateX(-50%)}}
+.bulk-offer-note {padding:var(--space-4);margin-bottom:var(--space-4);border:var(--border-width) solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface-raised);color:var(--color-text);font-size:var(--text-caption);line-height:var(--text-caption--line-height)}
+.bulk-offer-note strong {color:var(--color-primary);font-weight:500}
+.cart-price del {font-size:var(--text-caption);color:var(--color-text-muted)}
+.cart-price .bulk-item-saving {font-size:var(--text-small);color:var(--color-primary);text-align:right}
+.sum-row.bulk-discount {color:var(--color-primary)}
+.sum-row.bulk-discount strong {font-weight:500;font-variant-numeric:tabular-nums}
+/* Keep the compact catalog treatment while the promotion is docked below it. */
+@media(max-width:900px) {
+  body[data-view=store] .store-intro {padding-block:var(--space-2)}
+  body[data-view=store] .store-intro .section-label {display:none}
+}
+@media(prefers-reduced-motion:reduce) {
+  .bulk-ticker-track {animation:none;will-change:auto;width:100%}
+  .bulk-ticker-group {width:100%;min-width:0;flex-wrap:wrap;justify-content:center;gap:0 var(--space-6);padding:var(--space-1_25) var(--space-4);font-size:var(--text-small);line-height:18px}
+  .bulk-ticker-group+.bulk-ticker-group,.bulk-ticker-separator,.bulk-ticker-auto {display:none}
+}

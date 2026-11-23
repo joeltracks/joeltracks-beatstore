@@ -1,0 +1,130 @@
+[
+  {
+    "width": 320,
+    "height": 844,
+    "overflow": false,
+    "filtersOpen": false,
+    "summaryDisplay": "flex",
+    "firstRowTop": 538.578125,
+    "playerTop": 748,
+    "bannerTop": 702,
+    "bannerBottom": 748,
+    "bannerButtons": 0,
+    "visibleRows": 2,
+    "controls": [
+      {
+        "label": "Play After Hours",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "label": "Favorite After Hours",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "label": "Add After Hours to cart",
+        "width": 44,
+        "height": 44
+      }
+    ],
+    "animations": 0,
+    "footerPlatforms": 6
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "overflow": false,
+    "filtersOpen": false,
+    "summaryDisplay": "flex",
+    "firstRowTop": 520.578125,
+    "playerTop": 748,
+    "bannerTop": 716,
+    "bannerBottom": 748,
+    "bannerButtons": 0,
+    "visibleRows": 2,
+    "controls": [
+      {
+        "label": "Play After Hours",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "label": "Favorite After Hours",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "label": "Add After Hours to cart",
+        "width": 44,
+        "height": 44
+      }
+    ],
+    "animations": 0,
+    "footerPlatforms": 6
+  },
+  {
+    "width": 714,
+    "height": 662,
+    "overflow": false,
+    "filtersOpen": false,
+    "summaryDisplay": "flex",
+    "firstRowTop": 449.78125,
+    "playerTop": 574,
+    "bannerTop": 542,
+    "bannerBottom": 574,
+    "bannerButtons": 0,
+    "visibleRows": 1,
+    "controls": [
+      {
+        "label": "Play After Hours",
+        "width": 48,
+        "height": 48
+      },
+      {
+        "label": "Favorite After Hours",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "label": "Add After Hours to cart",
+        "width": 44,
+        "height": 44
+      }
+    ],
+    "animations": 0,
+    "footerPlatforms": 6
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "overflow": false,
+    "filtersOpen": true,
+    "summaryDisplay": "none",
+    "firstRowTop": 653.671875,
+    "playerTop": 812,
+    "bannerTop": 780,
+    "bannerBottom": 812,
+    "bannerButtons": 0,
+    "visibleRows": 1,
+    "controls": [
+      {
+        "label": "Play After Hours",
+        "width": 48,
+        "height": 48
+      },
+      {
+        "label": "Favorite After Hours",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "label": "Add After Hours to cart",
+        "width": 44,
+        "height": 44
+      }
+    ],
+    "animations": 0,
+    "footerPlatforms": 6
+  }
+]

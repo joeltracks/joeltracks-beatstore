@@ -1,0 +1,81 @@
+{
+  "fingerprint": {
+    "icons": 3,
+    "libraries": [],
+    "canvas": "24",
+    "style": "line",
+    "drawnAs": "strokes",
+    "strokeAt24": 1.65,
+    "lineAt24FromPixels": 1.25,
+    "cap": "round",
+    "join": "round",
+    "radius": 2,
+    "radiusPerStroke": 1.21,
+    "keyline": null,
+    "step": "1",
+    "paddingAt24": 2.17,
+    "sizes": []
+  },
+  "icons": [
+    {
+      "size": null,
+      "from": "assets\\graphics\\icons\\license-document.svg",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 2.17
+      },
+      "ink": {
+        "coverage": 0.2152777777777778,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": null,
+      "from": "assets\\graphics\\icons\\listen.svg",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": null,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 2.17
+      },
+      "ink": {
+        "coverage": 0.2064887152777778,
+        "line24": 1.25
+      }
+    },
+    {
+      "size": null,
+      "from": "assets\\graphics\\icons\\review-agreement.svg",
+      "geometry": {
+        "canvas": 24,
+        "drawnAs": "strokes",
+        "stroke": 1.65,
+        "strokeAt24": 1.65,
+        "cap": "round",
+        "join": "round",
+        "radius": 2,
+        "keyline": null,
+        "step": 1,
+        "paddingAt24": 2.17
+      },
+      "ink": {
+        "coverage": 0.2111545138888889,
+        "line24": 1.25
+      }
+    }
+  ]
+}

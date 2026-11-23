@@ -1,0 +1,207 @@
+/* Focused JT polish, guided by Unslop by Damir Sokolovsky.
+   https://github.com/heydamir/unslop · CC BY 4.0. Existing brand tokens retained. */
+:root {--motion-feedback:160ms;--motion-entry:240ms;--motion-ease:cubic-bezier(.22,1,.36,1)}
+
+/* Selected B identity: full-name capsule, with no initials. */
+.brand .jt-logo-lockup {width:224px;height:auto;aspect-ratio:13/3;object-fit:contain}
+.footer-inner .brand .jt-logo-lockup {width:180px;height:auto}
+.footer-about .brand {max-width:100%}
+.footer-about .brand .jt-logo-lockup {width:min(220px,100%);height:auto}
+@media(max-width:640px) {
+  #header .brand .jt-logo-lockup {width:180px}
+}
+@media(max-width:360px) {
+  #header .brand .jt-logo-lockup {width:164px}
+}
+
+/* 1. Spacing: related controls share a rhythm; all primary tap targets remain 44px. */
+body[data-view=store] {--header-height:72px}
+body[data-view=store] .store-intro {padding-block:var(--space-8) var(--space-6);gap:var(--space-8)}
+body[data-view=store] .intro-copy .section-label {margin-bottom:var(--space-2)}
+body[data-view=store] .intro-description {margin-top:var(--space-2)}
+.store-catalog-top {padding:var(--space-4) var(--space-6);gap:var(--space-4)}
+body[data-view=store] .store-spotlight {padding:var(--space-4) var(--space-6);gap:var(--space-6);grid-template-columns:128px minmax(0,1fr) auto}
+body[data-view=store] .store-spotlight .featured-art {width:128px;height:128px}
+body[data-view=store] .store-catalog .catalog-tools {padding:var(--space-4) var(--space-6)}
+.store-catalog .catalog-toolbar {gap:var(--space-4)}
+.store-filter-bottom {gap:var(--space-4);margin-top:var(--space-3)}
+.store-section-heading {margin-bottom:var(--space-6)}
+.purchase-steps {gap:var(--space-8)}
+.contact-channels {gap:var(--space-4);margin-bottom:var(--space-8)}
+.contact-channel {padding:var(--space-5);gap:var(--space-3)}
+.contact-layout {gap:var(--space-16)}
+.contact-form {padding:var(--space-8)}
+
+/* 2. Color: the cover and data lead; supporting navigation stays quiet. */
+.intro-copy .section-label {color:var(--color-text-muted)}
+.store-cart-summary {color:var(--color-text-muted);gap:var(--space-2)}
+.store-cart-summary strong {color:var(--color-text);font-weight:400}
+.store-cart-summary>svg {display:none}
+.spotlight-tags .tag {background:transparent;padding-inline:0;color:var(--color-text-muted)}
+.spotlight-tags {gap:var(--space-3)}
+body[data-view=store] #header::before,body[data-view=store] #player::before,body[data-view=store] .catalog-tools::before {box-shadow:none}
+.release-band {background:var(--color-surface)}
+.release-use>svg,.contact-channel-icon {color:var(--color-text-muted)}
+
+/* 3. Icons: preserve the measured JT family and align common interaction boxes. */
+.contact-channel-icon>svg,.release-use>svg {width:20px;height:20px}
+.release-use {grid-template-columns:24px minmax(0,1fr);column-gap:var(--space-3)}
+body[data-view=studio] .studio-sidebar nav a>svg {width:18px;height:18px;flex:none}
+
+/* 4–5. Copy lives in render functions; hierarchy uses the existing type families. */
+.btn {font-weight:500}
+.store-catalog-top h2 {font-size:var(--text-h4);font-weight:500}
+.store-catalog-top .catalog-count,.store-cart-summary {font-size:var(--text-small)}
+.store-spotlight h2 {font-size:var(--text-h3);font-weight:500}
+.store-spotlight p {margin-top:var(--space-2)}
+.store-spotlight .subtle-label {color:var(--color-text-muted)}
+.store-catalog .track-name b {font-size:var(--text-body);font-weight:500}
+.store-catalog .track-name small,.store-catalog .meta {font-size:var(--text-caption)}
+.store-catalog .beat-price {font-weight:500}
+body[data-view=store] .store-catalog .track {min-height:76px}
+.store-section-heading h2,.reference-license-card h3,.purchase-steps h3,.release-heading h2,.site-footer-column h2,.contact-topics h2,.contact-form h2 {font-weight:500}
+.license-fee strong {font-weight:var(--text-display--font-weight);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.reference-license-card>header {padding:var(--space-5);min-height:112px}
+.reference-license-card h3 {font-size:var(--text-h4)}
+.reference-license-card .license-card-body {gap:var(--space-4)}
+.release-platforms li {font-weight:500}
+.contact-channel strong {font-weight:500}
+
+/* 6. Layout: desktop keeps every filter visible; phone gets an explicit disclosure. */
+.catalog-refinements {margin:0}
+.catalog-refinements>summary {display:none;list-style:none}
+.catalog-refinements>summary::-webkit-details-marker {display:none}
+.catalog-refinements>summary>svg {transition:transform var(--motion-feedback) var(--motion-ease)}
+.catalog-refinements[open]>summary>svg {transform:rotate(180deg)}
+#filter-summary {font-size:var(--text-small);color:var(--color-text-muted);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+body[data-view=studio] {--header-height:72px}
+.studio-layout {grid-template-columns:240px minmax(0,1fr)}
+.workspace {padding:var(--space-8) clamp(var(--space-6),3vw,var(--space-10))}
+.workspace-title {margin-bottom:var(--space-6);gap:var(--space-6)}
+.workspace-title h1 {font-size:var(--text-page-title);font-weight:500;line-height:var(--text-page-title--line-height)}
+.workspace-title p {line-height:var(--text-caption--line-height);max-width:56ch}
+.dashboard-stats {gap:var(--space-6);margin-bottom:var(--space-6)}
+.dashboard-stats article {gap:var(--space-2);padding-bottom:var(--space-5)}
+.dashboard-stats strong {font-size:var(--text-stat);line-height:var(--text-stat--line-height);font-weight:500;letter-spacing:0}
+.dashboard-stats article>span,.dashboard-stats small {font-size:var(--text-caption);line-height:var(--text-caption--line-height)}
+.panel-heading h2 {font-size:var(--text-h4);font-weight:500}
+.panel-heading {margin-bottom:var(--space-6)}
+.dashboard-charts,.dashboard-bottom {gap:var(--space-6)}
+.studio-sidebar {padding-top:var(--space-8)}
+.studio-sidebar nav {gap:var(--space-1_25)}
+.studio-sidebar nav a {min-height:44px;gap:var(--space-3);padding:var(--space-2) var(--space-3);font-size:var(--text-caption)}
+.studio-sidebar nav a[aria-current] {background:var(--soft)}
+.sidebar-label {margin-bottom:var(--space-3)}
+.side-count {font-weight:500}
+.metric-switch button {min-height:36px;font-weight:400}
+.metric-switch [aria-pressed=true] {box-shadow:none;font-weight:500}
+.genre-bars {gap:var(--space-6);padding-top:var(--space-2)}
+.genre-panel .bar-track>span {background:var(--muted)}
+.genre-bars>div:first-child .bar-track>span {background:var(--accent)}
+.bar-label {margin-bottom:var(--space-2)}
+.chart-panel,.workspace-panel {padding:var(--space-6)}
+.chart-date,.line-chart text {letter-spacing:0;font-variant-numeric:tabular-nums}
+.payment-legend dd,.payment-donut strong {font-weight:500;font-variant-numeric:tabular-nums}
+
+/* 7. Details: distinguish active listening without shifting row alignment. */
+.track {position:relative}
+body[data-view=store] .track>.icon-btn {width:44px;height:44px;min-width:44px}
+.track.active::before {content:"";position:absolute;inset-block:var(--space-4);left:0;width:2px;border-radius:var(--radius-sm);background:var(--accent);pointer-events:none}
+.store-catalog .track.active::before {background:var(--color-canvas-accent)}
+.track-name a {vertical-align:bottom}
+.store-catalog #results :focus-visible {outline-offset:3px}
+body[data-view=store] .store-catalog .tab,body[data-view=store] .store-catalog .add-beat {transition:background-color var(--motion-feedback) var(--motion-ease),border-color var(--motion-feedback) var(--motion-ease),color var(--motion-feedback) var(--motion-ease)}
+
+/* 8–9. Keep artwork still and retain motion that explains state or an action. */
+.featured-art {border-radius:var(--radius-md)}
+.featured-art>img {transform:none;transition:none}
+.studio-sidebar nav a>svg {transition:transform var(--motion-feedback) var(--motion-ease),color var(--motion-feedback) var(--motion-ease)}
+@media(hover:hover){
+  .featured-art:hover>img {transform:none}
+  .studio-sidebar nav a:hover>svg,.studio-sidebar nav a[href="#studio-catalog"]:hover>svg,.studio-sidebar nav a[href="#studio-feature"]:hover>svg,.studio-sidebar nav a[href="#studio-stats"]:hover>svg {transform:translateY(-1px);color:currentColor}
+  .add-beat:hover svg,.release-use:hover>svg {transform:none}
+  body[data-view=store] .store-spotlight .feature-play:hover {transform:translate(-50%,-50%);background:var(--color-surface-inverse)}
+}
+@media(max-width:1150px){
+  .studio-layout {grid-template-columns:216px minmax(0,1fr)}
+  .workspace {padding:var(--space-6)}
+  .dashboard-stats {gap:var(--space-4)}
+}
+@media(max-width:900px){
+  body[data-view=store] .store-intro {padding-block:var(--space-4)}
+  body[data-view=store] .intro-copy .section-label {font-size:var(--text-small)}
+  body[data-view=store] .intro-description {font-size:var(--text-caption);line-height:var(--text-caption--line-height)}
+  body[data-view=store] .store-license-link {display:none}
+  .store-catalog-top {padding:var(--space-2) var(--space-4)}
+  .store-catalog-top h2 {font-size:var(--text-body)}
+  .store-cart-summary {min-height:44px}
+  body[data-view=store] .store-spotlight {grid-template-columns:64px minmax(0,1fr) 44px;padding:var(--space-3) var(--space-4);gap:var(--space-3)}
+  body[data-view=store] .store-spotlight .featured-art {width:64px;height:64px}
+  body[data-view=store] .store-spotlight .feature-play {width:44px;height:44px}
+  .store-spotlight .subtle-label {font-size:var(--text-small);line-height:var(--text-small--line-height)}
+  .store-spotlight h2 {font-size:var(--text-h4);margin-top:0}
+  .store-spotlight p {font-size:var(--text-small);line-height:var(--text-small--line-height);margin-top:0}
+  .spotlight-buy {padding:var(--space-2_5);min-height:44px;width:44px;justify-content:center}
+  .spotlight-buy-label {display:none}
+  body[data-view=store] .store-catalog .catalog-tools {padding:var(--space-3) var(--space-4) 0}
+  .store-catalog .catalog-toolbar {display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:var(--space-3)}
+  body[data-view=store] .store-catalog .tabs {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-1_25);width:100%}
+  body[data-view=store] .store-catalog .tab {white-space:normal;padding-inline:var(--space-1_25);font-size:var(--text-small);line-height:var(--text-small--line-height)}
+  .catalog-refinements>summary {display:flex;align-items:center;gap:var(--space-2);min-height:44px;font-size:var(--text-caption);font-weight:400;color:var(--color-text-muted);cursor:pointer;padding-block:var(--space-2)}
+  .catalog-refinements>summary>span {flex:1}
+  .catalog-refinements[open]>summary {color:var(--color-text)}
+  .store-filter-bottom {padding-block:var(--space-2) var(--space-4);margin:0;gap:var(--space-3)}
+  .store-catalog .list-head {height:36px}
+  .contact-layout {gap:var(--space-8)}
+  .dashboard-stats {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .metric-switch button {min-height:44px}
+}
+@media(max-width:640px){
+  body[data-view=store] {--header-height:64px}
+  body[data-view=store] .store-intro {padding-block:var(--space-4)}
+  body[data-view=store] .intro-copy .section-label {font-size:var(--text-small);margin-bottom:var(--space-2)}
+  body[data-view=store] .intro-description {font-size:var(--text-caption);line-height:var(--text-caption--line-height)}
+  .store-catalog-top {padding:var(--space-2) var(--space-4)}
+  .store-catalog-top h2 {font-size:var(--text-body)}
+  .store-catalog-top .catalog-count {margin-top:var(--space-1_25)}
+  .store-cart-summary {min-height:44px;max-width:88px}
+  body[data-view=store] .store-spotlight {padding:var(--space-3) var(--space-4);gap:var(--space-3);grid-template-columns:64px minmax(0,1fr) 44px}
+  body[data-view=store] .store-spotlight .featured-art {width:64px;height:64px}
+  .store-spotlight .subtle-label {font-size:var(--text-small)}
+  .store-spotlight h2 {font-size:var(--text-h4);margin-top:0}
+  .store-spotlight p {margin-top:var(--space-1_25)}
+  body[data-view=store] .store-catalog .catalog-tools {padding:var(--space-3) var(--space-4) 0}
+  .store-catalog .catalog-toolbar {grid-template-columns:1fr;gap:var(--space-3)}
+  .catalog-refinements>summary {display:flex;align-items:center;gap:var(--space-2);min-height:44px;font-size:var(--text-caption);font-weight:400;color:var(--color-text-muted);cursor:pointer;padding-block:var(--space-2)}
+  .catalog-refinements>summary>span {flex:1}
+  .catalog-refinements[open]>summary {color:var(--color-text)}
+  .store-filter-bottom {padding-block:var(--space-2) var(--space-4);margin:0;gap:var(--space-3)}
+  .store-filter-bottom .tag {min-height:44px}
+  .store-filter-bottom .sort-label {min-height:44px}
+  .store-catalog .list-head {height:36px}
+  body[data-view=store] .store-catalog .track {min-height:76px}
+  body[data-view=store] .store-catalog .track-title {gap:var(--space-2)}
+  body[data-view=store] .store-catalog .track .cover-play,body[data-view=store] .store-catalog .track .cover {width:44px;height:44px}
+  body[data-view=store] .store-catalog .add-beat {width:44px;height:44px;min-width:44px}
+  .store-catalog .track-name b {font-size:var(--text-caption)}
+  .store-catalog .track-name small,.store-catalog .meta {font-size:var(--text-small)}
+  body[data-view=store] .page-title h1 {font-size:var(--text-mobile-title)}
+  .contact-form {padding:var(--space-6)}
+  .contact-topics h2,.contact-form h2 {font-size:var(--text-h3)}
+  .studio-layout {display:block}
+  .studio-sidebar {padding-top:var(--space-3);padding-bottom:var(--space-3)}
+  .studio-sidebar nav a {min-height:80px;font-size:var(--text-small)}
+  .workspace {padding:var(--space-6) var(--space-4)}
+  .workspace-title h1 {font-size:var(--text-mobile-title)}
+  .dashboard-stats article>span,.dashboard-stats small {font-size:var(--text-small)}
+  .chart-panel,.workspace-panel {padding:var(--space-5)}
+}
+@media(max-width:360px){
+  .store-catalog .list-head,.store-catalog .track {grid-template-columns:minmax(0,1fr) 0 44px 44px}
+  .store-catalog .track>.icon-btn {width:44px;height:44px}
+}
+@media(prefers-reduced-motion:reduce){
+  .catalog-refinements>summary>svg,.studio-sidebar nav a>svg,body[data-view=store] .store-catalog .tab,body[data-view=store] .store-catalog .add-beat {transition:none}
+  .studio-sidebar nav a:hover>svg {transform:none}
+}

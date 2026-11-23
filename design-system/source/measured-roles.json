@@ -1,0 +1,236 @@
+{
+  "$comment": "Measured from https://ear2thabeat.com/beat-store/ on 2026-11-18. Edit names or values here, then run extract.mjs --rebuild to regenerate tokens.css, theme.css, tokens.json and preview.html.",
+  "name": "Ear2thabeat",
+  "source": "https://ear2thabeat.com/beat-store/",
+  "colors": {
+    "background": "#000000",
+    "text": "#dadada",
+    "heading": "#ffffff",
+    "text-muted": "#a5a5a5",
+    "border": "#f0f0f0",
+    "surface": "#1e1e1e",
+    "surface-inverse": "#f9fafa",
+    "primary": "#29775c",
+    "primary-foreground": "#ffffff",
+    "link": "#7a38fe",
+    "focus": "#0000001a"
+  },
+  "chart": [
+    "#29775c",
+    "#ff0000",
+    "#7c2727"
+  ],
+  "dark": null,
+  "palette": {
+    "black": "#000000",
+    "neutral-200": "#dadada",
+    "white": "#ffffff",
+    "neutral-950": "#1e1e1e",
+    "neutral-100": "#f3f5f8",
+    "neutral-950-2": "#0b0b0b",
+    "teal-700": "#29775c",
+    "neutral-950-3": "#131313",
+    "neutral-400": "#a5a5a5",
+    "red-600": "#ff0000",
+    "black-a50": "#00000080",
+    "sand-500": "#ab9a6c",
+    "red-600-2": "#ce232f",
+    "red-800": "#7c2727",
+    "neutral-400-2": "#adadad",
+    "red-600-3": "#da2036",
+    "red-700": "#cc0303",
+    "sage-300": "#b1cec5",
+    "neutral-950-4": "#252525",
+    "red-600-4": "#cb3522",
+    "slate-900": "#343e53"
+  },
+  "fonts": {
+    "sans": {
+      "family": "Poppins",
+      "measured": "Poppins",
+      "free": true,
+      "stack": "\"Poppins\", ui-sans-serif, system-ui, sans-serif",
+      "load": "Poppins",
+      "source": "Self-hosted",
+      "note": "Poppins is free (open licence)."
+    }
+  },
+  "text": {
+    "display": {
+      "size": 48,
+      "lh": 1.2,
+      "ls": 0,
+      "weight": "700",
+      "font": "sans",
+      "phone": 32
+    },
+    "h1": {
+      "size": 31,
+      "lh": 1.2,
+      "ls": 0,
+      "weight": "600",
+      "font": "sans",
+      "phone": 24
+    },
+    "h2": {
+      "size": 24,
+      "lh": 1,
+      "ls": 0,
+      "weight": "600",
+      "font": "sans"
+    },
+    "h3": {
+      "size": 22,
+      "lh": 1.4,
+      "ls": 0,
+      "weight": "600",
+      "font": "sans",
+      "phone": 24
+    },
+    "h4": {
+      "size": 18,
+      "lh": 1,
+      "ls": 0,
+      "weight": "600",
+      "font": "sans"
+    },
+    "body-lg": {
+      "size": 17,
+      "lh": 1,
+      "ls": 0,
+      "weight": "700",
+      "font": "sans",
+      "transform": "capitalize"
+    },
+    "body": {
+      "size": 14,
+      "lh": 1.5,
+      "ls": 0,
+      "weight": "300",
+      "font": "sans"
+    }
+  },
+  "space": {
+    "base": 5,
+    "scale": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "section": []
+  },
+  "radius": {
+    "sm": 2.7,
+    "md": 5,
+    "lg": 10
+  },
+  "shadow": {
+    "sm": "rgba(0, 0, 0, 0.5) 7px 6px 16px -7px"
+  },
+  "border": {
+    "width": 1
+  },
+  "container": {
+    "page": 798,
+    "wide": 1140,
+    "narrow": 1420
+  },
+  "breakpoint": {
+    "sm": 601,
+    "md": 768,
+    "lg": 960,
+    "xl": 992,
+    "2xl": 1025
+  },
+  "duration": {
+    "fast": 300,
+    "base": 400,
+    "slow": 500
+  },
+  "ease": {
+    "standard": "ease",
+    "alt-1": "ease-in-out"
+  },
+  "components": {
+    "$comment": "Measured recipes. A colour is a role name from colors (so it follows your edits) or a hex where no role matched. Radius in px or \"full\"; padding [vertical, horizontal].",
+    "buttons": [
+      {
+        "variant": "dark",
+        "label": "Facebook",
+        "bg": "#0b0b0b",
+        "fg": "#69727d",
+        "border": null,
+        "radius": 2.7,
+        "padding": [
+          0,
+          4
+        ],
+        "height": 27,
+        "font": {
+          "size": 17,
+          "weight": 400
+        },
+        "hover": {
+          "fg": "primary-foreground"
+        }
+      },
+      {
+        "variant": "outline",
+        "label": "SUBSCRIBE",
+        "bg": null,
+        "fg": "primary-foreground",
+        "border": {
+          "width": 1,
+          "style": "solid",
+          "color": "#cb3522"
+        },
+        "radius": 0,
+        "padding": [
+          0,
+          0
+        ],
+        "height": 40,
+        "font": {
+          "size": 14,
+          "weight": 300,
+          "ls": 0.014,
+          "transform": "uppercase"
+        },
+        "hover": {
+          "fg": "#cb3522"
+        }
+      }
+    ],
+    "card": null,
+    "input": {
+      "bg": null,
+      "fg": "text",
+      "placeholder": "text",
+      "border": {
+        "width": 1,
+        "style": "solid",
+        "color": "#ffffff"
+      },
+      "radius": 0,
+      "padding": [
+        12,
+        12
+      ],
+      "height": 40,
+      "font": {
+        "size": 12,
+        "weight": 300
+      }
+    },
+    "badge": null,
+    "nav": {
+      "bg": null,
+      "height": 80,
+      "position": "static",
+      "border": null
+    }
+  }
+}

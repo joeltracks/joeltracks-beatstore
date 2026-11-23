@@ -1,0 +1,46 @@
+{
+ "start": "2026-11-17T17:50:24.761Z",
+ "round": 0,
+ "idle": 0,
+ "errors": 1,
+ "status": "error",
+ "history": [
+  {
+   "at": "2026-11-17T18:15:26.061Z",
+   "mode": "manual",
+   "status": "error",
+   "fails": 0,
+   "round": 0,
+   "reused": false,
+   "stopHookActive": false
+  }
+ ],
+ "max": 3,
+ "marker": {
+  "page": "index.html",
+  "url": null,
+  "root": null,
+  "kind": "product",
+  "category": "beat licenses",
+  "primary": "Add to cart",
+  "rounds": 3,
+  "start": "2026-11-17T17:50:24.761Z",
+  "by": "gate.mjs --start"
+ },
+ "manual": true,
+ "fp": "844411c5dbe97291",
+ "page": "index.html",
+ "found": {
+  "fails": [],
+  "warns": [],
+  "crashed": [
+   "the gate itself failed: spawn EPERM"
+  ],
+  "seconds": {}
+ },
+ "open": [],
+ "waived": [],
+ "warnCount": 0,
+ "note": "the gate itself failed: spawn EPERM",
+ "at": "2026-11-17T18:15:26.064Z"
+}
