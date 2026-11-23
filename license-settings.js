@@ -17,3 +17,20 @@ function hydrateLicenses(saved) {
 }
 
 function startingPrice(){return cash(Math.min(...tiers.filter(item=>item.price).map(item=>item.price)));}
+
+// File availability is per beat, not a change to the license's promised package.
+// Public catalog flags must come from finalized uploads, never selected/pending files.
+function licenseAvailability(track, license) {
+  const required=license?.delivery;
+  if(!track||!license||license.id==='custom'||!Array.isArray(required)||!required.length||
+    required.some(file=>!['mp3','wav','stems'].includes(file))) return {enabled:false,missing:[]};
+  const missing=required.filter(file=>{
+    if(Object.hasOwn(track.fileAvailability||{},file))return track.fileAvailability[file]!==true;
+    const upload=track.files?.[file];
+    return !(typeof Blob!=='undefined'&&upload instanceof Blob&&upload.size>0);
+  });
+  return {enabled:missing.length===0,missing};
+}
+function missingLicenseFiles(track, license) {
+  return licenseAvailability(track,license).missing.map(file=>file==='stems'?'stems':file.toUpperCase()).join(' + ');
+}

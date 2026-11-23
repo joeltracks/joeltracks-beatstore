@@ -66,7 +66,16 @@ function showContacts(){
 function showBlog(){nav(page('The writing room','Notes from Joel Tracks.',empty('No articles published yet','Follow JT on Instagram for the latest updates.','<a class="btn secondary" href="'+instagramURL+'" target="_blank" rel="noopener noreferrer">Instagram '+icon('external',18)+'</a>')));}
 function showArticle(){nav(page('Article unavailable','',empty('This article is not published','Visit the blog for published articles.','<a class="btn secondary" href="#blog">Back to the blog</a>')));}
 function referenceLicenseCards(id=''){
-  return '<div class="reference-license-grid">'+tiers.map(item=>'<article class="reference-license-card"><header><h3>'+escapeHTML(item.name)+'</h3><p>'+escapeHTML(item.files)+'</p></header><div class="license-card-body"><div class="license-fee">'+(item.price?'<span>USD</span><strong>'+cash(item.price)+'</strong>':'<strong>Let’s talk</strong>')+'</div><ul class="license-file-list">'+['mp3','wav','stems'].map(file=>'<li class="'+(item.delivery.includes(file)?'included':'not-included')+'">'+icon(item.id==='custom'?'right':item.delivery.includes(file)?'check':'x',16)+'<span>'+(file==='stems'?'Stems':file.toUpperCase())+(item.id==='custom'?' · negotiated':'')+'</span></li>').join('')+'</ul><p>'+(item.id==='custom'?'Price, files and splits negotiated for your release.':'Publishing: '+item.publishing+'% artist / '+remainingShare(item.publishing)+'% JT. Master royalties: '+item.major+'% artist / '+remainingShare(item.major)+'% JT for major-label artists; '+item.indie+'% artist / '+remainingShare(item.indie)+'% JT for smaller indie artists.')+'</p><a class="text-link" href="#contacts">License enquiries '+icon('arrow',16)+'</a></div></article>').join('')+'</div>';
+  const track=id?beat(id):null;
+  return '<div class="reference-license-grid">'+tiers.map(item=>{
+    const custom=item.id==='custom';
+    const enabled=!id||custom||available(track,item.id);
+    const selected=id&&cartRows().some(row=>row.beatId===id&&row.tierId===item.id);
+    const missing=id&&!custom&&!enabled?missingLicenseFiles(track,item):'';
+    const reason=missing?'Unavailable: missing '+missing+'.':'';
+    const action=id?'<button type="button" class="btn secondary" data-action="'+(custom?'offer':selected?'remove':'add')+'" data-id="'+escapeHTML(id)+'" data-tier="'+item.id+'"'+(!enabled?' disabled aria-describedby="license-files-'+item.id+'"':'')+'>'+(custom?'Discuss custom license':!enabled?'Unavailable':selected?'Remove from cart':'Add '+escapeHTML(item.name.replace(' License',''))+' to cart')+'</button>':'<a class="text-link" href="#contacts">License enquiries '+icon('arrow',16)+'</a>';
+    return '<article class="reference-license-card"><header><h3>'+escapeHTML(item.name)+'</h3><p>'+escapeHTML(item.files)+'</p></header><div class="license-card-body"><div class="license-fee">'+(item.price?'<span>USD</span><strong>'+cash(item.price)+'</strong>':'<strong>Let’s talk</strong>')+'</div><ul class="license-file-list">'+['mp3','wav','stems'].map(file=>'<li class="'+(item.delivery.includes(file)?'included':'not-included')+'">'+icon(custom?'right':item.delivery.includes(file)?'check':'x',16)+'<span>'+(file==='stems'?'Stems':file.toUpperCase())+(custom?' · negotiated':'')+'</span></li>').join('')+'</ul><p>'+(custom?'Price, files and splits negotiated for your release.':'Publishing: '+item.publishing+'% artist / '+remainingShare(item.publishing)+'% JT. Master royalties: '+item.major+'% artist / '+remainingShare(item.major)+'% JT for major-label artists; '+item.indie+'% artist / '+remainingShare(item.indie)+'% JT for smaller indie artists.')+'</p>'+(reason?'<p class="license-availability-note" id="license-files-'+item.id+'">'+escapeHTML(reason)+'</p>':'')+action+'</div></article>';
+  }).join('')+'</div>';
 }
 function renderReferenceLicenses(){nav(page('Compare licenses','Choose the files your release needs.',referenceLicenseCards()+'<div class="license-notes"><section><h2>Review before purchase</h2><p>The complete license agreement will be available for review before checkout opens. File packages do not by themselves define usage permissions.</p></section><section><h2>Need different terms?</h2><p>Discuss price, deliverables and royalty splits directly with JT.</p><a class="text-link" href="#contacts">Discuss custom licensing '+icon('arrow',18)+'</a></section></div>'));}
 function showCheckout(){
@@ -137,6 +146,7 @@ Promise.allSettled([accessAPI('catalog'),accessAPI('access/status')]).then(([cat
     // No local/demo records are imported into the live catalog. Publication is a future seller API operation.
     tracks=Array.isArray(catalog.value.beats)?catalog.value.beats.filter(track=>track.status==='Published'&&!track.demo):[];
     catalogStatus=tracks.length?'ready':'empty';
+    removeUnavailableCartItems();
   }else catalogStatus='error';
   purchaseServiceAvailable=status.status==='fulfilled'&&status.value.available===true;
   renderRoute();

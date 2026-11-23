@@ -54,7 +54,7 @@ function cartLicense(item) {
   return offer?{...license,price:offer.price,offer}:null;
 }
 function available(track, tierId) {
-  return Boolean(track && tierId!=='custom' && tier(tierId)?.delivery.every(file=>Boolean(track.files[file])));
+  return licenseAvailability(track,tier(tierId)).enabled;
 }
 const cartRows = () => cart.filter(item=>{
   const track=beat(item.beatId);
@@ -62,6 +62,14 @@ const cartRows = () => cart.filter(item=>{
 });
 const cartPricing = (rows=cartRows()) => calculateBulkDeal(rows.map(item=>cartLicense(item).price));
 const total = () => cartPricing().totalCents/100;
+function removeUnavailableCartItems() {
+  const valid=cartRows();
+  if(valid.length===cart.length)return;
+  cart=valid;
+  save('cart',cart);
+  agreementsReviewed=false;
+  announce('Unavailable licenses were removed from your cart. Choose another available license.');
+}
 audio.volume = read('volume',.75);
 let dbPromise;
 function database() {
@@ -93,8 +101,9 @@ async function storeBeat(track) {
 }
 const thumbnails = new Map();
 function artURL(track) {
-  if (track.files.cover && !thumbnails.has(track.files.cover)) thumbnails.set(track.files.cover,URL.createObjectURL(track.files.cover));
-  return escapeHTML(thumbnails.get(track.files.cover) || track.artworkUrl || 'assets/branding/soft-seal/capsule.svg');
+  const artwork=track.files?.cover;
+  if (artwork instanceof Blob && artwork.size>0 && !thumbnails.has(artwork)) thumbnails.set(artwork,URL.createObjectURL(artwork));
+  return escapeHTML(thumbnails.get(artwork) || track.artworkUrl || 'assets/branding/soft-seal/capsule.svg');
 }
 function cover(track, large=false) {
   return '<img class="cover'+(large?' large':'')+'" src="'+artURL(track)+'" alt="" width="'+(large?53:40)+'" height="'+(large?53:40)+'">';
@@ -358,6 +367,7 @@ async function submitBeat(form, data) {
     };
     await storeBeat(track);
     tracks=tracks.filter(item=>item.id!==track.id).concat(track);
+    removeUnavailableCartItems();
     if(track.id===activeTrack&&sourceURL){
       audio.pause();
       audio.removeAttribute('src');
