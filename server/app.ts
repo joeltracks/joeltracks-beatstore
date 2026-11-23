@@ -16,6 +16,8 @@ export interface Bindings {
   SUPABASE_SECRET_KEY?: string;
   SUPABASE_PUBLISHABLE_KEY?: string;
   SELLER_SESSION_SECRET?: string;
+  R2_ACCESS_KEY_ID?: string;
+  R2_SECRET_ACCESS_KEY?: string;
   ACCESS_SECRET?: string;
   RESEND_API_KEY?: string;
   MAIL_FROM?: string;

@@ -2,8 +2,9 @@ import type { Hono, Context } from 'hono';
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import type { Bindings } from './app.ts';
 import { createSellerAuth, createSellerRepository, SellerAuthError, sellerEmail, type SellerAuth, type SellerAuthState, type SellerRepository, type SellerTokens } from './seller-auth.ts';
+import { registerUploadRoutes, type UploadDependencies } from './upload-routes.ts';
 import { hash, randomToken, seal, unseal, validToken } from './security.ts';
-export interface SellerDependencies { sellerAuth?:SellerAuth; sellerRepository?:SellerRepository; }
+export interface SellerDependencies extends UploadDependencies { sellerAuth?:SellerAuth; sellerRepository?:SellerRepository; }
 type C=Context<{Bindings:Bindings}>;
 function isReady(env:Bindings,d:SellerDependencies){return Boolean(env.SELLER_SESSION_SECRET&&env.SELLER_SESSION_SECRET.length>=32&&(d.sellerAuth||env.SUPABASE_URL&&env.SUPABASE_PUBLISHABLE_KEY)&&(d.sellerRepository||env.SUPABASE_URL&&env.SUPABASE_SECRET_KEY));}
 function services(env:Bindings,d:SellerDependencies){return {auth:d.sellerAuth||createSellerAuth(env.SUPABASE_URL!,env.SUPABASE_PUBLISHABLE_KEY!),repo:d.sellerRepository||createSellerRepository(env.SUPABASE_URL!,env.SUPABASE_SECRET_KEY!)};}
@@ -13,7 +14,7 @@ function putCookie(c:C,token:string,mfa:boolean){setCookie(c,cookie(c.env),token
 function owner(s:SellerAuthState){return s.identity.email.toLowerCase()===sellerEmail&&s.identity.confirmed;}
 function stage(s:SellerAuthState,mfa:boolean){return mfa&&s.identity.aal==='aal2'?'ready':s.factors.some(f=>f.verified)?'mfa':'enroll';}
 export function registerSellerRoutes(app:Hono<{Bindings:Bindings}>,d:SellerDependencies){
-  async function useSession(c:C,requireMfa:boolean,action:(s:SellerAuthState,tools:ReturnType<typeof services>,tokenHash:string,finish:()=>void,ready:boolean)=>Promise<Response>){
+  async function useSession(c:C,requireMfa:boolean,action:(s:SellerAuthState,tools:ReturnType<typeof services>,tokenHash:string,finish:()=>void,ready:boolean,release:()=>Promise<void>)=>Promise<Response>){
     const {repo,auth}=services(c.env,d);
     const token=getCookie(c,cookie(c.env));
     if(!validToken(token))return c.json({error:'Sign in to your seller workspace.'},401);
@@ -30,14 +31,15 @@ export function registerSellerRoutes(app:Hono<{Bindings:Bindings}>,d:SellerDepen
       await repo.revoke(tokenHash);clear(c);return c.json({error:'Sign in again to continue.'},401);
     }
     let finished=false;
+    async function release(){if(!finished){if(!await repo.save(tokenHash,lease,await seal(c.env.SELLER_SESSION_SECRET!,s.tokens))){await repo.revoke(tokenHash);throw new Error('SELLER_SESSION_SAVE_FAILED');}finished=true;}}
     try{
       if(requireMfa&&(!row.mfa||s.identity.aal!=='aal2'||!s.factors.some(f=>f.verified)))return c.json({error:'Complete authenticator verification first.'},403);
-      return await action(s,{repo,auth},tokenHash,()=>{finished=true;},row.mfa&&s.identity.aal==='aal2'&&s.factors.some(f=>f.verified));
+      return await action(s,{repo,auth},tokenHash,()=>{finished=true;},row.mfa&&s.identity.aal==='aal2'&&s.factors.some(f=>f.verified),release);
     }catch(error){
       if(error instanceof SellerAuthError)return c.json({error:error.message},400);
       throw error;
     }finally{
-      if(!finished&&!await repo.save(tokenHash,lease,await seal(c.env.SELLER_SESSION_SECRET!,s.tokens))){await repo.revoke(tokenHash);throw new Error('SELLER_SESSION_SAVE_FAILED');}
+      await release();
     }
   }
   app.use('/api/seller/*',async(c,next)=>{
@@ -83,6 +85,7 @@ export function registerSellerRoutes(app:Hono<{Bindings:Bindings}>,d:SellerDepen
     if(!await repo.create(verified.identity.id,verified.identity.authSessionId,await hash(token),await seal(c.env.SELLER_SESSION_SECRET!,verified.tokens),true,tokenHash))throw new Error('SELLER_SESSION_ROTATION_FAILED');
     finish();putCookie(c,token,true);return c.json({stage:'ready',email:sellerEmail});
   }));
+  registerUploadRoutes(app,(c,action)=>useSession(c,true,async(_s,_tools,hash,_finish,_ready,release)=>{await release();return action(hash);}),d);
   app.get('/api/seller/overview',c=>useSession(c,true,async(_s,{repo})=>c.json(await repo.overview())));
   app.post('/api/seller/logout',async c=>{
     const token=getCookie(c,cookie(c.env));

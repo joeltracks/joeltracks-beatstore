@@ -11,7 +11,7 @@ Account: `1b4bc53beb85cda4d8618ee8a695585f` (the seller-approved connected accou
 | `joeltracks-media` | `MEDIA_FILES` | Published MP3 preview copies and thumbnails | Private; no public URL enabled |
 | `joeltracks-private` | `PRIVATE_FILES` | Paid MP3/WAV/stems versions and buyer agreements | Private; no public URL enabled |
 
-Both buckets use **Standard** storage, reported location **ENAM** (Eastern North America), default jurisdiction. The location hint aligns with the main U.S. audience and U.S. East database; it is not a contractual data-residency guarantee. Neither bucket has a custom domain, enabled r2.dev endpoint or CORS policy. No automatic object-expiry rule was added that could delete purchased deliverables.
+Both buckets use **Standard** storage, reported location **ENAM** (Eastern North America), default jurisdiction. The location hint aligns with the main U.S. audience and U.S. East database; it is not a contractual data-residency guarantee. Neither bucket has a custom domain or enabled r2.dev endpoint. The subsequent upload milestone adds PUT-only CORS on the private bucket for the production storefront origin and seven-day cleanup limited to staging objects; verified files and buyer documents have no lifecycle-expiry rule. See [uploads](UPLOADS.md).
 
 The Cloudflare connector successfully wrote a 61-byte non-sensitive verification file into each bucket, read it back exactly and deleted it. Both buckets were empty afterward. No audio, buyer information, order or agreement was uploaded. No new API credentials were created.
 
@@ -19,7 +19,7 @@ The Cloudflare connector successfully wrote a 61-byte non-sensitive verification
 
 Use the seller's uploaded MP3 unchanged as the clean, full-length preview. Do not ask for a second preview file or automatically encode a lower-bitrate version.
 
-When the authenticated upload workflow is implemented:
+The authenticated upload workflow now saves private drafts. At the separate publication stage:
 
 1. Upload and validate an immutable private delivery version. Pending uploads, filenames and client-supplied availability flags do not count as completed files.
 2. At publication, make a byte-identical MP3 preview copy in `MEDIA_FILES`; the seller uploads the MP3 only once. Publish the preview URL only after its copy is complete and verified against the delivery version.
@@ -27,7 +27,7 @@ When the authenticated upload workflow is implemented:
 4. Derive per-beat license availability from verified private assets: Basic needs MP3, Premium needs MP3 + WAV, Unlimited needs all three including stems. Missing optional assets disable only the affected tiers. Recheck before payment; do not replace the buyer's selected tier silently.
 5. Retain the asset versions owed to existing paid orders when the seller changes files for future sales.
 
-These are the agreed requirements for the upload implementation, not a claim that an upload API or dashboard connection is already live.
+Private dashboard uploads are now connected. Byte-identical public preview copies and publication remain a subsequent integration; uploaded drafts stay private.
 
 ## Runtime connection
 
@@ -35,7 +35,7 @@ These are the agreed requirements for the upload implementation, not a claim tha
 
 The current Vercel storefront and public API remain in place. A Vercel build does not activate Cloudflare bindings. The existing authorized order-download handler reads only `PRIVATE_FILES`, checks the paid order and scoped session, streams the file and uses private/no-store caching. Its live mail/database/runtime configuration is still pending. No Cloudflare Worker was deployed by this storage setup.
 
-Seller authentication/MFA is now implemented on Vercel; see [seller access](SELLER_ACCESS.md). Before uploads can go live, connect upload metadata/finalization and multipart validation, catalog publication, and R2 access for the upload runtime. Direct browser-to-R2 uploads require narrowly scoped upload permissions and CORS restricted to the actual admin origins; CORS is not authentication. Configure these once the authenticated upload flow and origins exist, rather than adding wildcard access now. Do not put R2 credentials in browser code or commit them.
+Seller authentication/MFA is now implemented on Vercel; see [seller access](SELLER_ACCESS.md). Private draft uploads now use Vercel, the server-held bucket-scoped S3 credential and protected metadata/finalization APIs; see [uploads](UPLOADS.md). Public catalog publication remains pending. Direct browser-to-R2 uploads require narrowly scoped upload permissions and CORS restricted to the actual admin origins; CORS is not authentication. The production origin now has narrowly scoped PUT-only CORS; wildcard access is not enabled. Do not put R2 credentials in browser code or commit them.
 
 Public preview serving still needs its production delivery route or media domain. No domain has been purchased. Keep r2.dev disabled for the private bucket permanently and for the media bucket during this preparation. Billing alerts/usage monitoring and independent backup/restore setup are still pending; these two buckets in one account are not independent backups.
 

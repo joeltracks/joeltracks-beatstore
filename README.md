@@ -15,7 +15,7 @@ Use Node.js 24.22 or later. Open [the local storefront](http://127.0.0.1:4173/) 
 
 ## Current status
 
-**Not ready for live sales.** The dedicated Supabase project and private order-access schema are created. The Hono API implements one-use order links, session cookies, a transactional email outbox and authorized download streaming. R2 media/private buckets now exist, with bucket bindings prepared in the Cloudflare build; neither bucket has public access enabled. Seller password/TOTP authentication is now implemented for the approved owner, with a private order overview. Upload APIs and real beat files are not connected. Email sending remains disabled until server credentials and a verified sending domain are configured. Payment processing and final agreements are not implemented.
+**Not ready for live sales.** The dedicated Supabase project and private order-access schema are created. The Hono API implements one-use order links, session cookies, a transactional email outbox and authorized download streaming. R2 media/private buckets now exist, with bucket bindings prepared in the Cloudflare build; neither bucket has public access enabled. Seller password/TOTP authentication is now implemented for the approved owner, with a private order overview. Private draft uploads, resumable R2 transfer and file-based tier availability are connected. Public catalog publication and buyer delivery remain pending. Email sending remains disabled until server credentials and a verified sending domain are configured. Payment processing and final agreements are not implemented.
 
 The public catalog and blog are intentionally empty until real beats and approved articles are published. Old prototype browser data is preserved but not imported as production records. Contact links use JT's real email and Instagram. No test orders are seeded into the application.
 
@@ -24,6 +24,8 @@ See [access setup and verification](docs/ORDER_ACCESS.md) for configuration, sec
 See [R2 storage setup](docs/STORAGE.md) for the provisioned buckets, the approved use of uploaded MP3s as previews, access boundaries and remaining integration work.
 
 See [seller access](docs/SELLER_ACCESS.md) for the private login, MFA setup, session safeguards and remaining dashboard integrations.
+
+See [private beat uploads](docs/UPLOADS.md) for the draft library, progress/resume workflow, file limits and verification boundaries.
 
 ## Checks
 

@@ -6,11 +6,12 @@ import { createApp, processAccessEmails, type Bindings } from './app.ts';
 const root = resolve('.');
 const extensions = new Set(['.html', '.css', '.js', '.svg', '.jpg', '.png', '.ico', '.woff2']);
 const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
-const runtimeFiles = new Set(['index.html', 'app.js', 'seller-auth.js', 'catalog.js', 'design.js', 'license-settings.js', 'storefront.js', 'graphics.js', 'license-proposals.js', 'beat-details.js', 'footer.js', 'bulk-deals.js', 'motion.js', 'launch.js', 'launch.css', 'style.css', 'type-motion.css', 'refresh.css', 'refinement.css', 'storefront.css', 'beat-details.css', 'footer.css', 'bulk-deals.css', 'design-system/tokens.css']);
+const runtimeFiles = new Set(['index.html', 'app.js', 'seller-auth.js', 'seller-uploads.js', 'catalog.js', 'design.js', 'license-settings.js', 'storefront.js', 'graphics.js', 'license-proposals.js', 'beat-details.js', 'footer.js', 'bulk-deals.js', 'motion.js', 'launch.js', 'launch.css', 'style.css', 'type-motion.css', 'refresh.css', 'refinement.css', 'storefront.css', 'beat-details.css', 'footer.css', 'bulk-deals.css', 'design-system/tokens.css']);
 const env: Bindings = {
   APP_ORIGIN: process.env.APP_ORIGIN || 'http://127.0.0.1:4173',
   SUPABASE_URL: process.env.SUPABASE_URL, SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
   SUPABASE_PUBLISHABLE_KEY: process.env.SUPABASE_PUBLISHABLE_KEY, SELLER_SESSION_SECRET: process.env.SELLER_SESSION_SECRET,
+  R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
   ACCESS_SECRET: process.env.ACCESS_SECRET, RESEND_API_KEY: process.env.RESEND_API_KEY, MAIL_FROM: process.env.MAIL_FROM,
   ASSETS: { async fetch(request) {
     let path: string;

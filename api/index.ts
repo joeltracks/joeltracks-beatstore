@@ -13,7 +13,9 @@ export default {
       SUPABASE_URL: process.env.SUPABASE_URL,
       SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
       SUPABASE_PUBLISHABLE_KEY: process.env.SUPABASE_PUBLISHABLE_KEY,
-      SELLER_SESSION_SECRET: process.env.SELLER_SESSION_SECRET
+      SELLER_SESSION_SECRET: process.env.SELLER_SESSION_SECRET,
+      R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
+      R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY
     };
     return app.fetch(request, env);
   }

@@ -6,6 +6,7 @@ export default defineConfig({
     name: 'joeltracks-beatstore',
     entrypoint: './server/worker.ts',
     compatibilityDate: '2026-11-23',
+    compatibilityFlags: ['nodejs_compat'],
     assets: { runWorkerFirst: ['/api/*', '/access', '/studio', '/studio/*'] },
     env: {
       ASSETS: bindings.assets(),
@@ -17,6 +18,8 @@ export default defineConfig({
       SUPABASE_SECRET_KEY: bindings.secret(),
       SUPABASE_PUBLISHABLE_KEY: bindings.secret(),
       SELLER_SESSION_SECRET: bindings.secret(),
+      R2_ACCESS_KEY_ID: bindings.secret(),
+      R2_SECRET_ACCESS_KEY: bindings.secret(),
       ACCESS_SECRET: bindings.secret(),
       RESEND_API_KEY: bindings.secret(),
       MAIL_FROM: bindings.secret()
