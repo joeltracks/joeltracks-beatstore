@@ -6,7 +6,7 @@ Implemented November 23, 2026. This milestone implements the order-access founda
 
 - Supabase: **Joel Tracks Beatstore**, project `pihmwsdlbmfffjmqscbo`, in the seller-selected **MBUGUA BUILDERS** organization, **us-east-1**, Free plan. The creation quote was $0/month and the seller approved it. The unrelated Investment Project was not changed.
 - Schema: `database/guest-order-access.sql`, applied to the dedicated project. Orders/items/files, hashed access tokens/sessions, request limits and encrypted email jobs are private. No real or sample order is seeded.
-- No Cloudflare deployment, R2 bucket, paid subscription, domain, email sender or payment account was created.
+- This order-access milestone did not deploy a Cloudflare Worker, purchase a domain, configure an email sender or open a payment account. R2 buckets were subsequently provisioned with the seller's explicit account/billing approval; see [storage setup](STORAGE.md). Their private-file binding is prepared in source but not deployed to a live delivery runtime. The Vercel adapter still keeps purchase access unavailable.
 
 ## Local setup
 

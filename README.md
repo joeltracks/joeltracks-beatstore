@@ -15,11 +15,13 @@ Use Node.js 24.22 or later. Open [the local storefront](http://127.0.0.1:4173/) 
 
 ## Current status
 
-**Not ready for live sales.** The dedicated Supabase project and private order-access schema are created. The Hono API implements one-use order links, session cookies, a transactional email outbox and authorized download streaming. Email sending is disabled until server credentials and a verified sending domain are configured; the R2 delivery binding and real files are not connected. Payment processing and final agreements are not implemented. Seller access remains closed until authentication is implemented.
+**Not ready for live sales.** The dedicated Supabase project and private order-access schema are created. The Hono API implements one-use order links, session cookies, a transactional email outbox and authorized download streaming. R2 media/private buckets now exist, with bucket bindings prepared in the Cloudflare build; neither bucket has public access enabled. Seller authentication, upload APIs and real beat files are not connected. Email sending remains disabled until server credentials and a verified sending domain are configured. Payment processing and final agreements are not implemented.
 
 The public catalog and blog are intentionally empty until real beats and approved articles are published. Old prototype browser data is preserved but not imported as production records. Contact links use JT's real email and Instagram. No test orders are seeded into the application.
 
 See [access setup and verification](docs/ORDER_ACCESS.md) for configuration, security boundaries and activation requirements.
+
+See [R2 storage setup](docs/STORAGE.md) for the provisioned buckets, the approved use of uploaded MP3s as previews, access boundaries and remaining integration work.
 
 ## Checks
 
