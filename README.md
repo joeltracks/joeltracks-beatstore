@@ -29,7 +29,11 @@ npm run typecheck
 npm run build
 ```
 
-The Cloudflare build uses `cf` and the compatible Vite plugin release candidate, pinned in the lockfile. It builds an explicit public asset allowlist, excluding server sources, credentials, internal plans and browser profiles. Building does not deploy or enable paid services.
+`npm run build` now creates Vercel's `dist/` output from the explicit public asset allowlist. `vercel.json` sets the build command and output directory, routes `/access` to the storefront, and routes API requests to the shared Hono Node handler. Server sources, credentials, internal plans and browser profiles are excluded from public assets.
+
+The Cloudflare target remains available through `npm run build:cloudflare`, using `cf` and the compatible pinned Vite plugin. Its output is `.cloudflare/output`, not `dist/`. Building either target does not deploy or enable paid services.
+
+The Vercel adapter currently serves the public API and keeps purchase access unavailable. Cloudflare's scheduled mail dispatcher and R2 bindings are not activated by a Vercel build. Do not enable live email or downloads merely by adding credentials; choose and finish the backend runtime/dispatcher setup first. Local development continues to use `npm run dev`. See [deployment notes](docs/ORDER_ACCESS.md#vercel-build-target).
 
 ## Project notes
 

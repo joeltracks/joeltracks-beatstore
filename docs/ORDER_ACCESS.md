@@ -65,3 +65,15 @@ Runtime assets preserve the selected logo, typography, palette, responsive layou
 - The actual Cloudflare local Worker served the customer views and API and kept unconfigured access unavailable. Its production bundle contains the intended public scripts and excludes server/config/internal-plan/simulator files. The Supabase security advisor returned no findings; the database remained empty after tests.
 
 Activation still needs real published audio/artwork, private file storage, final license/party details, verified payment processing, approved terms/privacy/refund policy, seller authentication and a verified sending domain. No live signature, purchase or launch is claimed by this milestone.
+
+## Vercel build target
+
+Added November 23 after the first Git-connected deployment reported that no `dist` output existed. The original `cf build` succeeded but wrote `.cloudflare/output`, which Vercel's configured output directory did not match.
+
+- `npm run build` / `npm run build:vercel` creates `dist/index.html` plus the allowlisted runtime assets. `vercel.json` explicitly overrides the output directory to `dist` and selects the Vercel build command, independent of the dashboard's previous build override.
+- `api/index.ts` uses Vercel's Web Standard Node function export to call the shared Hono application. `/api/*` rewrites to that function; `/access` rewrites to the storefront. Missing arbitrary files are not rewritten to HTML. Seller paths remain unavailable.
+- Global response headers retain no-referrer, no-sniff and frame protection. Purchase-access HTML is not cached.
+- This is a storefront/public-API deployment target, **not a completed migration of background mail delivery or private R2 storage**. Its adapter deliberately does not pass mail/storage credentials into the shared application, so email requests cannot be accepted without an operational dispatcher. Local/Cloudflare implementations remain available separately.
+- `npm run build:cloudflare` preserves the original Worker build. `npm run dev:worker` remains the local Worker option. Do not point Vercel's public output at the repository root or the complete Cloudflare bundle, which contains backend code.
+
+Official references checked November 23: [Vercel output directory configuration](https://vercel.com/docs/project-configuration/vercel-json#outputdirectory), [Node Web Standard function exports](https://vercel.com/docs/functions/runtimes/node-js). The fix adds build-output/asset isolation and adapter tests. Hosted deployment status must be verified separately from a successful local build.
