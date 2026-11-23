@@ -30,6 +30,15 @@
 .seller-session-info .status-pill {width:fit-content}
 
 .workspace>.panel {margin-block:var(--space-6)}
+.seller-page-heading {display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:24px;flex-wrap:wrap}
+.seller-page-heading .page-title {margin:0;min-width:0;flex:1 1 260px}
+.seller-page-heading .btn {flex-shrink:0;min-height:48px}
+.seller-library-actions {display:flex;gap:12px;flex-wrap:wrap}
+.seller-library-shortcut {display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.seller-library-shortcut h2 {margin-top:0}
+.seller-library-shortcut p {max-width:540px;margin-bottom:0;color:var(--muted)}
+.seller-upload-panel,.seller-draft-list {scroll-margin-top:120px}
+@media(max-width:600px){.seller-library-actions{width:100%}.seller-library-actions .btn{flex:1}.seller-library-shortcut .btn{width:100%}}
 
 .seller-upload-panel .field-grid {gap:var(--space-5)}
 .seller-upload-panel input[type=file] {max-width:100%;font-size:14px;min-height:48px}

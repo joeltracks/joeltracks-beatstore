@@ -4,11 +4,13 @@ Implemented November 23, 2026, for the approved owner account. The seller dashbo
 
 ## Seller workflow
 
-1. Sign in with the approved password/TOTP flow and open Beat library.
+1. Sign in with the approved password/TOTP flow. Choose **Upload a beat** at the top of Overview, or **Beat library & files** in the workspace menu (`/#studio-catalog`). If an already-open tab still shows the older dashboard, reload the page first.
 2. Enter title, category, BPM, optional musical key and comma-separated tags. Add the files you have, then choose **Save draft and upload**. The MP3 is the approved full-length preview source; no second preview file or transcoding is introduced.
 3. Follow checksum, transfer and server-verification progress. Only the server's verified result enables a file in the draft's license package.
 4. A paused upload remains listed. After reconnecting or reloading, choose **Resume** and reselect the same file. The whole-file SHA-256 fingerprint must match. Completed parts are discovered from R2, not trusted from browser storage.
-5. Edit metadata or add/replace individual files. An empty field preserves the current file. A replacement takes over only after verification. Remove detaches the file from the current package; it does not delete retained immutable versions.
+5. Choose **Saved beats** to reach existing drafts, then **Edit beat & files** on the beat you want to change. Edit metadata or add/replace individual files. An empty field preserves the current file. A replacement takes over only after verification. Remove detaches the file from the current package; it does not delete retained immutable versions.
+
+Library load failures show a retry action instead of continuously requesting the API and hiding the upload form behind an indefinite loading message. Successful retries clear the failure state. Browser UI source regression checks cover this recovery path and the visible upload/edit entry points.
 
 The UI shows Basic/Premium/Unlimited availability from the tier's configured deliverables and server-derived file flags. Missing WAV disables Premium and Unlimited; missing stems disables Unlimited. Incomplete or failed uploads never qualify. Custom terms remain negotiated. No upload makes a beat public automatically.
 
