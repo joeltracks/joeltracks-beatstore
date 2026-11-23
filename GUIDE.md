@@ -1,4 +1,15 @@
-# JT / Joel Tracks prototype review
+# JT / Joel Tracks project guide
+
+## Current status - November 23, 2026
+
+Guest checkout and order-scoped email access are now the selected buyer model. The separate Joel Tracks Supabase Free project in MBUGUA BUILDERS / US East and private order-access schema have been created. See [setup and verification](docs/ORDER_ACCESS.md).
+
+Run `npm ci` and `npm run dev` with Node.js 24.22 or later. [Local storefront](http://127.0.0.1:4173/) / [purchase access](http://127.0.0.1:4173/#purchases). The application server runs the API; a static Python server is insufficient for this milestone.
+
+The active website no longer publishes fictional beats, generated previews, sample sales/articles, a public seller demo or pretend form successes. Real contacts remain. Empty catalog/blog and unavailable checkout/access-email states are deliberate until real content and services are configured. The chosen brand, UI styles and bulk pricing remain. Legacy browser data is preserved without importing it as production data.
+
+**Still pending:** backend project secret, email provider credentials and verified sending domain, real catalog/audio/artwork, R2 binding, final agreements/payment and seller authentication. No emails or payments have been sent, and no production deployment has occurred. The sections below retain the historical prototype review and decisions; they do not describe completed live integrations.
+
 
 Open [the local preview](http://127.0.0.1:4173/) and use the **Seller demo** link in the footer to switch to the studio. To restart the preview, run this command from the project directory.
 

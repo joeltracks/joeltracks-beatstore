@@ -2,6 +2,9 @@
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
 *.pem
 *.key
 *.p12
@@ -19,6 +22,10 @@ venv/
 
 # Temporary output and machine-specific files
 /tmp/
+/web/
+/dist/
+/.cloudflare/
+/.wrangler/
 *.log
 *.crdownload
 .DS_Store

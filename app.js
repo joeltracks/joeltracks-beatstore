@@ -14,24 +14,24 @@ const clock = seconds => {
 };
 const escapeHTML = value => String(value??'').replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 function read(key, fallback) {
-  try {return JSON.parse(localStorage.getItem('jt:'+key)) ?? fallback;} catch {return fallback;}
+  try {return JSON.parse(localStorage.getItem('jt:store:'+key)) ?? fallback;} catch {return fallback;}
 }
 function save(key, value) {
-  try {localStorage.setItem('jt:'+key,JSON.stringify(value));}
+  try {localStorage.setItem('jt:store:'+key,JSON.stringify(value));}
   catch {announce('Browser storage is unavailable. Changes apply to this session.');}
 }
 let favorites = new Set(read('favorites',[]));
 let cart = read('cart',[]);
-let offers = read('offers',[]);
-let metrics = read('metrics',{});
-let featureSettings = read('feature',{beatId:'demo-0',label:'Featured beat'});
-let demoSales = read('demo-sales',[]);
+let offers = [];
+let metrics = {};
+let featureSettings = read('feature',{beatId:'',label:'Featured beat'});
+let recordedSales = [];
 let seenEvents = read('seen-events',{offers:[],payments:[]});
 let pendingSellerRefresh = false;
 hydrateLicenses(read('license-settings',{}));
-let tracks = demoTracks.slice();
+let tracks = [];
 let sourceURL = '';
-let activeTrack = demoTracks[0].id;
+let activeTrack = '';
 let playSequence = 0;
 let focusedBeforeDialog;
 let noticeTimer;
@@ -54,7 +54,7 @@ function cartLicense(item) {
   return offer?{...license,price:offer.price,offer}:null;
 }
 function available(track, tierId) {
-  return track.demo || tierId==='custom' || tier(tierId)?.delivery.every(file=>Boolean(track.files[file]));
+  return Boolean(track && tierId!=='custom' && tier(tierId)?.delivery.every(file=>Boolean(track.files[file])));
 }
 const cartRows = () => cart.filter(item=>{
   const track=beat(item.beatId);
@@ -94,7 +94,7 @@ async function storeBeat(track) {
 const thumbnails = new Map();
 function artURL(track) {
   if (track.files.cover && !thumbnails.has(track.files.cover)) thumbnails.set(track.files.cover,URL.createObjectURL(track.files.cover));
-  return escapeHTML(thumbnails.get(track.files.cover) || (track.id==='demo-0'?'assets/after-hours.jpg':'assets/cover-'+track.cover+'.jpg'));
+  return escapeHTML(thumbnails.get(track.files.cover) || track.artworkUrl || 'assets/branding/soft-seal/capsule.svg');
 }
 function cover(track, large=false) {
   return '<img class="cover'+(large?' large':'')+'" src="'+artURL(track)+'" alt="" width="'+(large?53:40)+'" height="'+(large?53:40)+'">';
@@ -123,6 +123,7 @@ function renderRoute(change=false) {
   else if (current==='cart') showCart();
   else if (current==='checkout') showCheckout();
   else if (current==='licenses') showLicenses();
+  else if (current==='purchases'||current==='purchases-confirm') showPurchases();
   else if (current==='offers') showBuyerOffers();
   else if (current==='contacts') showContacts();
   else if (current==='blog') showBlog();
@@ -280,11 +281,6 @@ audio.addEventListener('pause',syncPlayButtons);
 audio.addEventListener('ended',syncPlayButtons);
 audio.addEventListener('timeupdate',updateProgress);
 audio.addEventListener('loadedmetadata',updateProgress);
-const mockPayments=[
-  {ref:'JT-DEMO-027',beatId:'demo-0',track:'After Hours',license:'Premium License',amount:100,status:'Paid'},
-  {ref:'JT-DEMO-028',beatId:'demo-1',track:'Palm Wine',license:'Basic License',amount:50,status:'Pending'},
-  {ref:'JT-DEMO-029',beatId:'demo-2',track:'No Signal',license:'Unlimited License',amount:500,status:'Refunded'}
-];
 function table(headers,rows){
   return '<div class="table-scroll" tabindex="0" role="region" aria-label="Seller data"><table class="data-table"><thead><tr>'+headers.map(item=>'<th scope="col">'+item+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map(cell=>'<td>'+cell+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
 }
@@ -617,12 +613,4 @@ compactCatalog.addEventListener('change',()=>{
   if(panel)panel.open=!compactCatalog.matches||catalogFiltersOpen;
 });
 let oldRoute=location.hash||'#store';
-renderRoute();
-localBeats().then(saved=>{
-  if(!saved.length)return;
-  const overrides=new Set(saved.map(item=>item.id));
-  tracks=demoTracks.filter(item=>!overrides.has(item.id)).concat(saved);
-  renderRoute();
-}).catch(()=>{
-  if(route().startsWith('studio'))announce('Local file storage could not be opened.');
-});
+// launch.js initializes the public catalog and order-access flow.

@@ -1,20 +1,35 @@
 # Joel Tracks Beatstore
 
-Frontend prototype for the Joel Tracks beat store, with R&B, Afro and Trap catalogs, browser previews, favorites, license selection, a cart, agreement review and a seller dashboard.
+Joel Tracks beat store with a guest order-access backend under development. The storefront retains R&B, Afro and Trap browsing, favorites, cart and license comparisons; fictional catalog and transaction data are no longer loaded.
 
 ## Run locally
 
 From the project directory, run:
 
 ```sh
-python -m http.server 4173 --bind 127.0.0.1
+npm ci
+npm run dev
 ```
 
-Open [the local storefront](http://127.0.0.1:4173/). No frontend build or package installation is required.
+Use Node.js 24.22 or later. Open [the local storefront](http://127.0.0.1:4173/) or [purchase access](http://127.0.0.1:4173/#purchases). This server serves both the frontend and API; a Python static server cannot run the API.
 
 ## Current status
 
-This is a UI prototype. Catalog tracks, synthesized previews, transactions and analytics include demo data. Browser storage holds local edits and shopping state. The seller dashboard is a preview without production authentication. Payments, contract execution, email delivery and private file delivery are not integrated yet.
+**Not ready for live sales.** The dedicated Supabase project and private order-access schema are created. The Hono API implements one-use order links, session cookies, a transactional email outbox and authorized download streaming. Email sending is disabled until server credentials and a verified sending domain are configured; the R2 delivery binding and real files are not connected. Payment processing and final agreements are not implemented. Seller access remains closed until authentication is implemented.
+
+The public catalog and blog are intentionally empty until real beats and approved articles are published. Old prototype browser data is preserved but not imported as production records. Contact links use JT's real email and Instagram. No test orders are seeded into the application.
+
+See [access setup and verification](docs/ORDER_ACCESS.md) for configuration, security boundaries and activation requirements.
+
+## Checks
+
+```sh
+npm test
+npm run typecheck
+npm run build
+```
+
+The Cloudflare build uses `cf` and the compatible Vite plugin release candidate, pinned in the lockfile. It builds an explicit public asset allowlist, excluding server sources, credentials, internal plans and browser profiles. Building does not deploy or enable paid services.
 
 ## Project notes
 

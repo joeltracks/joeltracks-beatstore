@@ -1,0 +1,29 @@
+{
+  "name": "joeltracks-beatstore",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24.22.0"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env.local server/dev.ts",
+    "test": "node --test tests/*.test.ts tests/*.test.mjs",
+    "prepare:web": "node scripts/prepare-web.mjs",
+    "build": "npm run prepare:web && cf build",
+    "dev:worker": "npm run prepare:web && cf dev",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "2.1.11",
+    "@supabase/supabase-js": "2.119.2",
+    "hono": "4.13.20"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "2.0.0-rc.3",
+    "@types/node": "26.6.6",
+    "cf": "1.0.0-rc.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.8"
+  }
+}

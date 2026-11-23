@@ -5,41 +5,6 @@ const tiers = [
   {id:'unlimited', name:'Unlimited License', price:500, files:'MP3 + WAV + Stems'},
   {id:'custom', name:'Custom License', price:null, files:'Negotiated'}
 ];
-const demoTracks = [
-  ['After Hours',0,88,'F♯ min',168,'late night,soulful,slow jam',3],
-  ['Palm Wine',1,106,'A min',154,'warm,guitar,dance',8],
-  ['No Signal',2,142,'C♯ min',150,'dark,808,hard',1],
-  ['Velvet Room',0,82,'D min',184,'smooth,rhodes,soulful',11],
-  ['On The Coast',1,112,'G min',166,'sunset,percussion,bounce',4],
-  ['Black Ice',2,148,'F min',156,'cold,808,dark',5],
-  ['Half Past Two',0,94,'C min',151,'r&b,moody,late night',7],
-  ['Gold Dust',1,104,'B min',169,'guitar,warm,afro fusion',10],
-  ['Low Beam',2,136,'E min',162,'bass,night,808',2],
-  ['Slow Motion',0,76,'G min',173,'soulful,slow jam,rhodes',6],
-  ['High Tide',1,118,'D min',157,'summer,dance,percussion',9],
-  ['Pressure',2,152,'G♯ min',148,'hard,808,drill',12],
-  ['Blue Silk',0,90,'A min',164,'smooth,guitar,moody',5],
-  ['Sundown',1,102,'F min',177,'warm,afro fusion,sunset',3],
-  ['Cold Start',2,144,'D min',159,'dark,hard,night',2],
-  ['Read Receipts',0,84,'F♯ min',180,'r&b,late night,piano',4],
-  ['Lagos Drive',1,113,'C min',160,'bounce,percussion,dance',10],
-  ['Phantom',2,128,'B min',173,'melodic,808,cold',1],
-  ['Side B',0,92,'C♯ min',165,'soulful,vintage,rhodes',7],
-  ['Daybreak',1,109,'G min',171,'warm,summer,guitar',9],
-  ['Redline',2,160,'E min',144,'hard,bass,808',8],
-  ['Leave A Light',0,81,'D min',182,'slow jam,piano,moody',11],
-  ['Open Air',1,116,'F♯ min',156,'dance,percussion,warm',6],
-  ['Blind Spot',2,145,'A min',151,'dark,night,drill',12],
-  ['Second Verse',0,96,'E min',162,'smooth,soulful,guitar',10],
-  ['Ginger',1,108,'C♯ min',165,'guitar,bounce,afro fusion',3],
-  ['Swerve',2,140,'F min',153,'hard,808,melodic',5],
-  ['Paper Moon',0,78,'G min',188,'piano,vintage,late night',7],
-  ['Sunroom',1,114,'A min',159,'summer,warm,percussion',4],
-  ['Night Shift',2,146,'C min',154,'cold,bass,dark',2]
-].map(([title,genre,bpm,key,duration,tags,cover], index) => ({
-  id:'demo-'+index,title,genre:categories[genre],bpm,key,duration,tags:tags.split(','),cover,
-  seed:index+1, created:30-index, demo:true, status:'Published', files:{}
-}));
 const marks = {
   instagram:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
   mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',

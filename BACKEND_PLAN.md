@@ -1,6 +1,6 @@
 # Joel Tracks backend plan
 
-Prepared November 18, 2026; revised November 19, 2026 after the supplied *Beatstore Backend Plan Review*. Status: researched recommendation, not an implemented backend. No accounts, paid subscriptions, domain registrations, emails or live payment integrations were created. The review is advisory input, not approval of new business policies. Section 12 records how each proposal was addressed.
+Prepared November 18, 2026; reviewed November 19; implementation status updated November 23, 2026. This remains the architecture plan; only the guest order-access foundation is implemented so far. The seller approved a separate Supabase Free project in MBUGUA BUILDERS / US East at the quoted $0/month and local work without a domain. That project and its private schema now exist. No paid subscriptions, domain, live emails/payments or production deployment have been created. See [the implementation status and activation requirements](docs/ORDER_ACCESS.md). The supplied review is advisory input, not approval of new business policies. Section 12 records its disposition.
 
 ## 1. Confirmed scope
 
@@ -127,7 +127,7 @@ Before launch, enroll and test a second TOTP factor on a separately secured devi
 
 Document a manual break-glass procedure controlled through the protected infrastructure owner account: verify seller identity outside the storefront, audit the action, revoke existing sessions, reset/re-enroll factors and rotate affected secrets. Password reset or access to the contact inbox alone must not bypass MFA. Test a lost-primary-phone scenario, protect offline recovery material and keep recovery privileges out of public API routes.
 
-**Recommendation for buyer access:** guest checkout plus secure email order-access links; optional passwordless accounts later for cross-device favorites and purchase history. Anonymous favorites can stay in the browser, preserving the existing experience. This buyer-account policy remains a recommendation for review.
+**Confirmed buyer model (November 23):** guest checkout plus secure, order-scoped email access links. The seller asked to start implementation. Optional passwordless accounts for cross-device favorites and full purchase history remain a later decision. Favorites/cart stay in a separate browser namespace; old prototype records are not imported as live data. Access tokens, server sessions, an email outbox and download authorization are implemented; email/provider/R2 configuration and verified checkout are not active yet.
 
 ### Returning to Custom offers without an account
 
@@ -295,7 +295,7 @@ Track external dependencies explicitly: seller submits identity/onboarding docum
 9. **Operations and regions:** approve the separate B2 account/backup runner and retention/recovery targets; confirm offline storage/key custody and a second MFA factor. Confirm the region after Kenya/U.S. latency measurements and privacy review. Account creation, paid services and production changes remain subject to the seller's authorization.
 10. **Custom and marketing policies, before enabling those features:** approve thread capability expiry/recovery and any exclusive grant/surviving-license/refund rules. Approve the marketing service/budget and a valid postal address with counsel; do not spend the transactional quota on newsletter campaigns.
 
-This plan recommends a stack and implementation sequence. It does not approve new legal terms, spend the budget, open a payment account or deploy production services.
+This plan recommends a stack and implementation sequence. The November 23 order-access milestone provisions only the explicitly approved Free Supabase project and schema; it does not approve new legal terms, activate paid services, open a payment account or deploy production services.
 
 ## 12. Review disposition and source checks
 

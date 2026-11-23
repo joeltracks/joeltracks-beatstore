@@ -205,7 +205,11 @@ window.addEventListener('resize',()=>{
 },{passive:true});
 reducedMotion.addEventListener('change',()=>{
   generationRun?.cancel();
-  document.querySelectorAll('*').forEach(element=>element.getAnimations().forEach(animation=>animation.finish()));
+  document.getAnimations().forEach(animation=>{
+    const end=animation.effect?.getComputedTiming().endTime;
+    if(!Number.isFinite(end)){animation.cancel();return;}
+    try{animation.finish();}catch{animation.cancel();}
+  });
   requestFrame();
 });
 connectView();
