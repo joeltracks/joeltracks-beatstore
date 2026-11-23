@@ -9,7 +9,7 @@ function workspace() {
   const timers = [], clicks = [], events = {}, windowEvents = {};
   const ctx = vm.createContext({
     document: { hidden: false, addEventListener(name, handler) { (events[name] ||= []).push(handler); if (name === 'click') clicks.push(handler); }, getElementById() { return null; } },
-    window: { addEventListener(name, handler) { (windowEvents[name] ||= []).push(handler); } }, setTimeout(fn) { timers.push(fn); },
+    window: { addEventListener(name, handler) { (windowEvents[name] ||= []).push(handler); } }, setTimeout(fn) { timers.push(fn); }, clearTimeout() {},
     escapeHTML: value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'),
     icon: () => '', categories: ['R&B Beats', 'Afro Beats', 'Trap Beats'], tiers: [],
     route: () => 'studio-catalog', nav() {}, afterRender() {}, page: (...parts) => parts.join(''),
@@ -138,4 +138,103 @@ test('overview exposes uploads before orders and the library exposes all file in
   for (const kind of ['mp3', 'wav', 'stems', 'cover']) assert.match(library, new RegExp('type="file" name="' + kind + '"'));
   assert.match(library, /Leaving a field empty keeps an existing file/);
   assert.match(library, /data-id="test-id"/);
+});
+
+function automaticUploadWorkspace({valid=true}={}){
+  const workspaceState=workspace(),{ctx,run}=workspaceState;
+  const values={title:valid?'Real beat title':'',genre:valid?'R&B Beats':'',bpm:valid?'88':'',key:'C min',tags:'soulful'};
+  const form={id:'seller-beat-form',isConnected:true,dataset:{},values,files:{},elements:{namedItem:name=>({value:values[name]})},checkValidity:()=>true,reportValidity(){}};
+  const feedback={innerHTML:''},status={textContent:''},progressEvents=[],saves=[],uploads=[];
+  ctx.FormData=class{constructor(form){this.form=form;}get(name){return this.form.files[name]||this.form.values[name]||'';}};
+  ctx.document.getElementById=id=>({'seller-beat-form':form,'seller-file-feedback':feedback,'seller-status':status,'upload-progress':{scrollIntoView(){}}}[id]||null);
+  ctx.document.querySelectorAll=()=>[];ctx.document.querySelector=()=>null;ctx.prefersQuietMotion=()=>true;
+  ctx.uploadFeedback=()=>progressEvents.push(run('({active:uploadRun.active,message:uploadRun.message,outcome:uploadRun.outcome})'));
+  ctx.loadSellerBeats=async()=>{};
+  ctx.libraryData=data;run('sellerBeatData=libraryData');
+  ctx.sellerAPI=async(path,body)=>{assert.equal(path,'beats');saves.push(body);return {id:'saved-beat-id'};};
+  ctx.sendFile=async(file,id,kind)=>uploads.push({file,id,kind});
+  const choose=(kind,file)=>{form.files[kind]=file;return workspaceState.events.change[0]({target:{form,type:'file',name:kind,files:[file],dataset:{}}});};
+  return {...workspaceState,form,feedback,status,progressEvents,saves,uploads,choose};
+}
+
+test('file selection starts automatically with visible started/completed states, without pressing Save',async()=>{
+  const {choose,feedback,saves,uploads,progressEvents,run}=automaticUploadWorkspace();
+  const file=new File(['ID3fixture'],'real-selection.mp3',{type:'audio/mpeg'});
+  await choose('mp3',file);
+  assert.equal(saves.length,1);assert.equal(uploads.length,1);assert.equal(uploads[0].file,file);
+  assert(progressEvents.some(event=>event.active&&event.message.includes('Upload started')));
+  assert.match(feedback.innerHTML,/Uploaded and verified/);
+  assert.match(progressEvents.at(-1).message,/Upload complete/);
+  assert.equal(run('uploadRun.active'),false);
+});
+
+test('files selected before required details stay visibly queued and start once details are completed',async()=>{
+  const {choose,form,feedback,status,saves,timers,events,uploads}=automaticUploadWorkspace({valid:false});
+  await choose('mp3',new File(['ID3fixture'],'waiting.mp3'));
+  assert.equal(saves.length,0);assert.match(feedback.innerHTML,/Queued — add beat title, category, BPM/);
+  assert.match(status.textContent,/Upload has not started/);
+  Object.assign(form.values,{title:'Ready now',genre:'Afro Beats',bpm:'106'});
+  events.input[0]({target:{form}});assert.equal(timers.length,1);await timers.shift()();
+  assert.equal(uploads.length,1);assert.equal(saves[0].title,'Ready now');
+  assert.match(feedback.innerHTML,/Uploaded and verified/);
+});
+
+test('another file selected while uploading is queued and processed serially for the same beat',async()=>{
+  const {ctx,choose,feedback,saves,uploads,run}=automaticUploadWorkspace();let release;
+  ctx.sendFile=async(file,id,kind)=>{uploads.push({file,id,kind});if(kind==='mp3')await new Promise(resolve=>{release=resolve;});};
+  const first=choose('mp3',new File(['ID3fixture'],'first.mp3'));
+  await new Promise(resolve=>setImmediate(resolve));assert.equal(run('uploadRun.active'),true);
+  await choose('stems',new File(['PKfixture'],'second.zip'));
+  assert.match(feedback.innerHTML,/Queued — uploads next/);assert.equal(uploads.length,1);
+  release();await first;
+  assert.equal(saves.length,1);assert.deepEqual(uploads.map(item=>item.kind),['mp3','stems']);
+  assert(uploads.every(item=>item.id==='saved-beat-id'));
+});
+
+test('failed automatic uploads show an error, retain the file for retry and reuse the saved draft',async()=>{
+  const {ctx,choose,feedback,form,progressEvents,run,saves}=automaticUploadWorkspace();
+  ctx.sendFile=async()=>{throw new Error('Connection interrupted');};
+  await choose('mp3',new File(['ID3fixture'],'retry.mp3'));
+  assert.match(feedback.innerHTML,/Not finished — Connection interrupted/);
+  assert.equal(progressEvents.at(-1).outcome,'error');assert.equal(run('sellerQueuedFiles.size'),1);
+  assert.equal(form.values.title,'Real beat title');assert.equal(form.dataset.id,'saved-beat-id');
+  ctx.sendFile=async()=>{};ctx.retryForm=form;await run('startSellerFiles(retryForm)');
+  assert.match(feedback.innerHTML,/Uploaded and verified/);assert.equal(saves[1].id,'saved-beat-id');
+  assert.equal(run('sellerQueuedFiles.size'),0);
+});
+
+test('file selection during the final library refresh waits for that refresh before starting another batch',async()=>{
+  const {ctx,choose,run,timers,uploads}=automaticUploadWorkspace();let finishRefresh;
+  ctx.loadSellerBeats=async()=>new Promise(resolve=>{finishRefresh=resolve;});
+  const first=choose('mp3',new File(['ID3fixture'],'first.mp3'));
+  await new Promise(resolve=>setImmediate(resolve));assert.equal(run('uploadRun.active'),true);
+  await choose('cover',new File(['image fixture'],'cover.png'));
+  assert.equal(uploads.length,1);finishRefresh();await first;
+  assert.equal(run('uploadRun.active'),false);assert.equal(timers.length,1);
+  ctx.loadSellerBeats=async()=>{};await timers.shift()();
+  assert.deepEqual(uploads.map(item=>item.kind),['mp3','cover']);
+});
+
+test('loss of seller access does not restore a private upload queue after it was cleared',async()=>{
+  const {ctx,choose,run}=automaticUploadWorkspace();let fail;
+  ctx.sendFile=async()=>new Promise((_resolve,reject)=>{fail=reject;});
+  const pending=choose('mp3',new File(['ID3fixture'],'private.mp3'));
+  await new Promise(resolve=>setImmediate(resolve));
+  run("sellerView={stage:'password'};resetSellerFileSelection();");fail(new Error('Access revoked'));
+  await pending;
+  assert.equal(run('sellerQueuedFiles.size'),0);assert.equal(run('sellerFileStates.size'),0);
+});
+
+test('successfully resuming the same queued file clears its failed feedback and does not upload it twice',async()=>{
+  const {ctx,choose,run,events,feedback,timers}=automaticUploadWorkspace();
+  const stamp=file=>{ctx.hashedFile=file;run("sellerFileHashes.set(hashedFile,'same-full-file-hash')");};
+  ctx.sendFile=async file=>{stamp(file);throw new Error('Interrupted');};
+  await choose('mp3',new File(['ID3fixture'],'resume.mp3'));
+  assert.equal(run('sellerQueuedFiles.size'),1);
+  ctx.resumeAsset={id:'pending-id',kind:'mp3',filename:'resume.mp3',status:'uploading'};
+  run("sellerBeatData.beats=[{id:'saved-beat-id',assets:[resumeAsset]}]");
+  ctx.sendFile=async file=>stamp(file);
+  await events.change[0]({target:{dataset:{resumeUpload:'pending-id'},files:[new File(['ID3fixture'],'resume.mp3')],value:''}});
+  assert.equal(run('sellerQueuedFiles.size'),0);assert.equal(timers.length,0);
+  assert.match(feedback.innerHTML,/Uploaded and verified/);assert.doesNotMatch(feedback.innerHTML,/Not finished/);
 });

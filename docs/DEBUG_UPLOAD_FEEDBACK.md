@@ -1,0 +1,9 @@
+# Upload selection and feedback — November 23, 2026
+
+The owner confirmed that they expected upload to start when a file was selected. The previous implementation only started on form submission; choosing a file produced no upload or selection status. This workflow mismatch explains the reported lack of start/completion feedback. Recent production error logs returned no matching server errors; this does not establish a successful live R2 upload.
+
+The file-input change handler now queues the selected file immediately and starts once the required title, category and BPM are valid. Missing details are listed beside queued files. Additional selections during a transfer queue next, rather than starting concurrent requests. Every batch saves/reuses the draft ID and uses the existing protected upload/checksum/verification API. A completed file is marked verified only after that API completes.
+
+Status rows and the progress panel sit directly below file selection. They explicitly distinguish waiting, conversion, transfer, server verification, success and failure. Metadata-only edits use Save beat details. Failed batches retain unverified files and the saved ID for Retry queued uploads. Refreshing draft cards leaves the editor mounted, and new batches wait until final refresh completes. Owner-access loss clears the in-memory queue.
+
+Regression checks exercise the actual file-change event handler, not just the conversion helper: no-click automatic start, required-field gating, visible completion, serial selection during upload, retry without duplicate draft creation, final-refresh races and revoked-access cleanup. Storage/API authorization and actual encoded-audio decoding tests remain in the full suite. No owner credential, production test upload or live payment/email was used for these checks.

@@ -50,14 +50,14 @@ async function loadSeller({background=false}={}){
     redraw=redraw||state.stage!==previousStage;
     if(state.stage==='ready'&&(!background||!sellerOverview))sellerOverview=await sellerAPI('overview');
     if(state.stage!=='ready'){
-      sellerOverview=null;sellerBeatData=null;sellerBeatsAttempted=false;sellerEditingId='';
+      sellerOverview=null;sellerBeatData=null;sellerBeatsAttempted=false;sellerEditingId='';resetSellerFileSelection();
       if(uploadRun.active){uploadRun.stopped=true;uploadRun.xhr?.abort();uploadRun.cancelConversion?.();}
     }
   }catch(error){
     if(epoch!==sellerLoadEpoch)return;
     sellerError=error.message;sellerChecked=true;
     if(error.status===401||error.status===403){
-      sellerView={stage:'password'};sellerOverview=null;sellerSetupKey='';sellerBeatData=null;sellerBeatsAttempted=false;sellerEditingId='';redraw=true;
+      sellerView={stage:'password'};sellerOverview=null;sellerSetupKey='';sellerBeatData=null;sellerBeatsAttempted=false;sellerEditingId='';resetSellerFileSelection();redraw=true;
       if(uploadRun.active){uploadRun.stopped=true;uploadRun.xhr?.abort();uploadRun.cancelConversion?.();}
     }else if(background&&previousStage==='ready')sellerMessage('Connection check failed. Your work is still here; saving requires a verified session.');
     else{sellerView={stage:'unavailable'};redraw=true;}
@@ -81,7 +81,7 @@ document.addEventListener('click',async event=>{
   try{
     if(action==='retry'){sellerChecked=false;sellerView={stage:'loading'};sellerError='';renderSellerWorkspace();return;}
     if(action==='logout'){
-      await sellerAPI('logout',{});sellerLoadEpoch++;sellerView={stage:'password'};sellerOverview=null;sellerBeatData=null;sellerBeatsAttempted=false;sellerBeatError='';sellerEditingId='';sellerSetupKey='';sellerError='';sellerChecked=true;renderSellerWorkspace();return;
+      await sellerAPI('logout',{});sellerLoadEpoch++;sellerView={stage:'password'};sellerOverview=null;sellerBeatData=null;sellerBeatsAttempted=false;sellerBeatError='';sellerEditingId='';resetSellerFileSelection();sellerSetupKey='';sellerError='';sellerChecked=true;renderSellerWorkspace();return;
     }
     if(action==='enroll'){
       const data=await sellerAPI('enroll',{});sellerView={stage:data.stage};sellerSetupKey=data.secret;sellerError='';renderSellerWorkspace();document.querySelector('[name="code"]')?.focus();
