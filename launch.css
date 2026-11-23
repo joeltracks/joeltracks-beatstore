@@ -67,5 +67,10 @@
 .seller-selected-files small {display:block;color:var(--muted);margin-top:4px}
 .seller-selected-files [data-file-state="ready"]>span:last-child {color:var(--accent)}
 .seller-selected-files [data-file-state="error"]>span:last-child {color:var(--color-proposal,#ffc48a)}
+.seller-publication {padding-block:20px;border-top:1px solid var(--line)}
+.seller-publication .access-help {margin-block:12px 16px;max-width:680px}
+.publication-actions {display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.publication-actions .text-link {min-height:44px;display:inline-flex;align-items:center;gap:8px}
+.seller-publication .form-status:empty {display:none}
 #upload-progress progress {display:block;width:100%;height:12px;accent-color:var(--accent);margin-block:16px}
 @media(max-width:600px){.draft-files li{align-items:flex-start;flex-direction:column}.pending-actions{width:100%;justify-content:space-between}.seller-upload-panel .panel-heading{align-items:flex-start;flex-direction:column}}

@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import { bodyLimit } from 'hono/body-limit';
 import { registerSellerRoutes, type SellerDependencies } from './seller-routes.ts';
+import { registerPublicCatalogRoutes } from './publication-routes.ts';
 import { createRepository, type Repository } from './repository.ts';
 import { hash, keyedHash, randomToken, seal, unseal, validToken, safeFilename } from './security.ts';
 
@@ -91,7 +92,7 @@ export function createApp(dependencies: Dependencies = {}) {
     return c.json({ error: 'This service is temporarily unavailable. Please try again or contact JT.' }, 503);
   });
   app.get('/api/health', c => c.json({ status: 'ok' }));
-  app.get('/api/catalog', c => c.json({ beats: [], state: 'awaiting-publication', checkoutAvailable: false }));
+  registerPublicCatalogRoutes(app,dependencies);
   app.post('/api/checkout', c => c.json({ error: 'Checkout is not open yet. Please contact JT about licensing.' }, 503));
   app.get('/api/access/status', c => c.json({ available: configured(c.env, dependencies) }));
   app.post('/api/access/request', async c => {

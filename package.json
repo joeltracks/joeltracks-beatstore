@@ -23,7 +23,8 @@
     "@supabase/supabase-js": "2.119.2",
     "hash-wasm": "4.13.0",
     "hono": "4.13.20",
-    "lamejs": "1.2.1"
+    "lamejs": "1.2.1",
+    "music-metadata": "12.8.1"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "2.0.0-rc.3",

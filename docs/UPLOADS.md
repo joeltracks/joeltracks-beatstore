@@ -1,6 +1,6 @@
 # Private beat uploads
 
-Implemented November 23, 2026, for the approved owner account. The seller dashboard's **Beat library** (`/#studio-catalog`) now saves beat metadata and uploads private MP3, WAV, stems ZIP and JPEG/PNG/WebP files to R2. **This milestone saves private drafts. It does not publish beats, enable buyer checkout or generate agreements.**
+Implemented November 23, 2026, for the approved owner account. The seller dashboard's **Beat library** (`/#studio-catalog`) saves beat metadata and uploads private MP3, WAV, stems ZIP and JPEG/PNG/WebP files to R2. **Uploading/saving remains private. Publish, Update storefront and Unpublish are now separate explicit actions; see [publication](PUBLICATION.md). Buyer checkout and agreement generation remain separate integrations.**
 
 ## Seller workflow
 

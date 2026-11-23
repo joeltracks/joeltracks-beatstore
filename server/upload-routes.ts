@@ -1,7 +1,9 @@
 import type { Hono, Context } from 'hono';
 import type { Bindings } from './app.ts';
 import { createUploadRepository, createUploadStorage, UploadError, partSize, uploadLimits, validateBeat, validateFile, validId, type UploadRepository, type UploadStorage, type Asset, type UploadPart } from './uploads.ts';
-export interface UploadDependencies {uploadRepository?:UploadRepository;uploadStorage?:UploadStorage;}
+import { publicationRepository,publicationConfigured } from './publication-routes.ts';
+import type { PublicationDependencies } from './publications.ts';
+export interface UploadDependencies extends PublicationDependencies {uploadRepository?:UploadRepository;uploadStorage?:UploadStorage;}
 type C=Context<{Bindings:Bindings}>;
 export type SellerGuard=(c:C,action:(hash:string)=>Promise<Response>)=>Promise<Response>;
 export function registerUploadRoutes(app:Hono<{Bindings:Bindings}>,guard:SellerGuard,d:UploadDependencies){
@@ -23,7 +25,11 @@ export function registerUploadRoutes(app:Hono<{Bindings:Bindings}>,guard:SellerG
     return uploaded;
   }
   app.get('/api/seller/beats',c=>guard(c,async hash=>{
-    try{const db=repo(c.env);return c.json({beats:await db.list(hash),storageAvailable:ready(c.env),limits:uploadLimits,partSize});}
+    try{
+      const db=repo(c.env),beats=await db.list(hash) as Record<string,unknown>[];
+      const publications=publicationConfigured(c.env,d)?await publicationRepository(c.env,d).states(hash):{};
+      return c.json({beats:beats.map(b=>({...b,publication:publications[String(b.id)]||null})),storageAvailable:ready(c.env),publishingAvailable:publicationConfigured(c.env,d),limits:uploadLimits,partSize});
+    }
     catch(e){if(e instanceof UploadError)return c.json({error:e.message},e.status as 400);throw e;}
   }));
   app.post('/api/seller/beats',c=>execute(c,async(hash,db)=>{

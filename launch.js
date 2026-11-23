@@ -84,7 +84,7 @@ function showCheckout(){
 async function playBeat(id,force=false){
   const track=beat(id);
   if(!track)return;
-  if(!force&&activeTrack===id&&sourceURL){
+  if(!force&&activeTrack===id&&sourceURL&&!audio.error){
     if(audio.paused){try{await audio.play();}catch{announce('Audio could not be played. Please try again.');}}else audio.pause();
     return;
   }

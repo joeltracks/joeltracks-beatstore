@@ -3,8 +3,10 @@ import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import type { Bindings } from './app.ts';
 import { createSellerAuth, createSellerRepository, SellerAuthError, sellerEmail, type SellerAuth, type SellerAuthState, type SellerRepository, type SellerTokens } from './seller-auth.ts';
 import { registerUploadRoutes, type UploadDependencies } from './upload-routes.ts';
+import { registerSellerPublicationRoutes } from './publication-routes.ts';
+import type { PublicationDependencies } from './publications.ts';
 import { hash, randomToken, seal, unseal, validToken } from './security.ts';
-export interface SellerDependencies extends UploadDependencies { sellerAuth?:SellerAuth; sellerRepository?:SellerRepository; }
+export interface SellerDependencies extends UploadDependencies,PublicationDependencies { sellerAuth?:SellerAuth; sellerRepository?:SellerRepository; }
 type C=Context<{Bindings:Bindings}>;
 function isReady(env:Bindings,d:SellerDependencies){return Boolean(env.SELLER_SESSION_SECRET&&env.SELLER_SESSION_SECRET.length>=32&&(d.sellerAuth||env.SUPABASE_URL&&env.SUPABASE_PUBLISHABLE_KEY)&&(d.sellerRepository||env.SUPABASE_URL&&env.SUPABASE_SECRET_KEY));}
 function services(env:Bindings,d:SellerDependencies){return {auth:d.sellerAuth||createSellerAuth(env.SUPABASE_URL!,env.SUPABASE_PUBLISHABLE_KEY!),repo:d.sellerRepository||createSellerRepository(env.SUPABASE_URL!,env.SUPABASE_SECRET_KEY!)};}
@@ -86,6 +88,7 @@ export function registerSellerRoutes(app:Hono<{Bindings:Bindings}>,d:SellerDepen
     finish();putCookie(c,token,true);return c.json({stage:'ready',email:sellerEmail});
   }));
   registerUploadRoutes(app,(c,action)=>useSession(c,true,async(_s,_tools,hash,_finish,_ready,release)=>{await release();return action(hash);}),d);
+  registerSellerPublicationRoutes(app,(c,action)=>useSession(c,true,async(_s,_tools,hash,_finish,_ready,release)=>{await release();return action(hash);}),d);
   app.get('/api/seller/overview',c=>useSession(c,true,async(_s,{repo})=>c.json(await repo.overview())));
   app.post('/api/seller/logout',async c=>{
     const token=getCookie(c,cookie(c.env));

@@ -150,7 +150,7 @@ function automaticUploadWorkspace({valid=true}={}){
   ctx.document.querySelectorAll=()=>[];ctx.document.querySelector=()=>null;ctx.prefersQuietMotion=()=>true;
   ctx.uploadFeedback=()=>progressEvents.push(run('({active:uploadRun.active,message:uploadRun.message,outcome:uploadRun.outcome})'));
   ctx.loadSellerBeats=async()=>{};
-  ctx.libraryData=data;run('sellerBeatData=libraryData');
+  ctx.libraryData=structuredClone(data);run('sellerBeatData=libraryData');
   ctx.sellerAPI=async(path,body)=>{assert.equal(path,'beats');saves.push(body);return {id:'saved-beat-id'};};
   ctx.sendFile=async(file,id,kind)=>uploads.push({file,id,kind});
   const choose=(kind,file)=>{form.files[kind]=file;return workspaceState.events.change[0]({target:{form,type:'file',name:kind,files:[file],dataset:{}}});};
@@ -237,4 +237,18 @@ test('successfully resuming the same queued file clears its failed feedback and 
   await events.change[0]({target:{dataset:{resumeUpload:'pending-id'},files:[new File(['ID3fixture'],'resume.mp3')],value:''}});
   assert.equal(run('sellerQueuedFiles.size'),0);assert.equal(timers.length,0);
   assert.match(feedback.innerHTML,/Uploaded and verified/);assert.doesNotMatch(feedback.innerHTML,/Not finished/);
+});
+
+test('saved-card actions are rendered again after the upload becomes idle, without replacing the editor',async()=>{
+  const {ctx,choose,run}=automaticUploadWorkspace();
+  vm.runInContext(await readFile(new URL('../seller-publishing.js',import.meta.url),'utf8'),ctx);
+  ctx.publicationData={...data,publishingAvailable:true,beats:[{id:'saved-beat-id',title:'Ready beat',genre:'R&B Beats',bpm:88,key:'C min',tags:[],assets:[],fileAvailability:{mp3:true,wav:false,stems:false}}]};
+  run('sellerBeatData=publicationData');
+  const html=[];
+  ctx.document.querySelector=selector=>selector==='.seller-draft-list'?{replaceWith:node=>html.push(node.html)}:null;
+  ctx.document.createElement=()=>{let markup='';return {set innerHTML(value){markup=value;},content:{querySelector:()=>({html:markup})}};};
+  ctx.loadSellerBeats=async()=>run('refreshSellerDraftCards()');
+  await choose('mp3',new File(['ID3fixture'],'ready-to-publish.mp3'));
+  assert.match(html[0],/data-publication-action="publish"[^>]*disabled/);
+  assert.doesNotMatch(html.at(-1),/data-publication-action="publish"[^>]*disabled/,'The Publish action must become enabled after verification');
 });

@@ -19,15 +19,15 @@ The Cloudflare connector successfully wrote a 61-byte non-sensitive verification
 
 Use the selected or automatically generated MP3 as the clean, full-length preview source. The seller's November 23 update authorizes automatic WAV-to-MP3 conversion when no MP3 is selected. The browser generates that MP3 once; the verified bytes will be reused unchanged for preview copying and MP3 delivery. No separate preview upload is required. See [the conversion workflow](UPLOADS.md).
 
-The authenticated upload workflow now saves private drafts. At the separate publication stage:
+The authenticated upload workflow saves private drafts. The current publication stage is implemented as follows (superseding the earlier plan for a public preview copy):
 
 1. Upload and validate an immutable private delivery version. Pending uploads, filenames and client-supplied availability flags do not count as completed files.
-2. At publication, make a byte-identical MP3 preview copy in `MEDIA_FILES`; the seller uploads the MP3 only once. Publish the preview URL only after its copy is complete and verified against the delivery version.
+2. Publish a verified immutable snapshot and issue short-lived R2 GET links only for its MP3 and optional artwork. The uploaded/generated MP3 is reused unchanged; no separate preview upload or media-bucket copy is needed. Both buckets retain private access. See [publication delivery and expiry](PUBLICATION.md).
 3. Keep WAVs, stems and buyer agreements in `PRIVATE_FILES`. Never expose that bucket or its keys through public catalog responses. The MP3 preview itself will be publicly listenable and copyable once serving is enabled.
 4. Derive per-beat license availability from verified private assets: Basic needs MP3, Premium needs MP3 + WAV, Unlimited needs all three including stems. Missing optional assets disable only the affected tiers. Recheck before payment; do not replace the buyer's selected tier silently.
 5. Retain the asset versions owed to existing paid orders when the seller changes files for future sales.
 
-Private dashboard uploads are now connected. Byte-identical public preview copies and publication remain a subsequent integration; uploaded drafts stay private.
+Private dashboard uploads and explicit Publish/Update storefront/Unpublish controls are connected. WAV/stem files remain private. Dedicated media-bucket/CDN copies remain a later option; uploaded drafts stay private until Publish.
 
 ## Runtime connection
 
