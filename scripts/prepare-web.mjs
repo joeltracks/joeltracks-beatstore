@@ -9,7 +9,7 @@ await rm(target, { recursive: true, force: true });
 await mkdir(target, { recursive: true });
 const html = await readFile('index.html', 'utf8');
 const linked = [...html.matchAll(/(?:src|href)="([^"?#]+)(?:\?[^"#]*)?"/g)].map(match=>match[1]);
-const rootFiles = new Set(['index.html', ...linked.filter(path=>!path.startsWith('assets/')&&!path.startsWith('http'))]);
+const rootFiles = new Set(['index.html', 'seller-audio-worker.js', ...linked.filter(path=>!path.startsWith('assets/')&&!path.startsWith('http'))]);
 for(const file of rootFiles) {
   const destination=resolve(target,file);
   if(!destination.startsWith(target))throw new Error('Invalid asset path');

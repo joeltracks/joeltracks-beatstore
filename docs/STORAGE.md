@@ -17,7 +17,7 @@ The Cloudflare connector successfully wrote a 61-byte non-sensitive verification
 
 ## Approved MP3 preview behavior
 
-Use the seller's uploaded MP3 unchanged as the clean, full-length preview. Do not ask for a second preview file or automatically encode a lower-bitrate version.
+Use the selected or automatically generated MP3 as the clean, full-length preview source. The seller's November 23 update authorizes automatic WAV-to-MP3 conversion when no MP3 is selected. The browser generates that MP3 once; the verified bytes will be reused unchanged for preview copying and MP3 delivery. No separate preview upload is required. See [the conversion workflow](UPLOADS.md).
 
 The authenticated upload workflow now saves private drafts. At the separate publication stage:
 

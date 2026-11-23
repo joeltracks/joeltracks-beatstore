@@ -15,6 +15,7 @@ test('Vercel build emits its configured output with all entry assets and six log
   for (const ref of refs.filter(ref => !/^(?:https?:|#)/.test(ref))) assert((await stat(resolve(root, ref))).isFile(), ref);
   const logos = ['spotify.png', 'apple-music.svg', 'amazon-music.svg', 'youtube.svg', 'deezer.svg', 'tidal.png'];
   for (const logo of logos) assert((await stat(resolve(root, 'assets/graphics/footer/platforms', logo))).isFile());
+  for (const file of ['seller-audio-worker.js','assets/vendor/lame.min.js','assets/vendor/lamejs-NOTICE.txt','assets/vendor/lamejs-LGPL-3.0.txt','assets/vendor/lamejs-GPL-3.0.txt']) assert((await stat(resolve(root,file))).isFile(),file);
   const files = await readdir(root, { recursive: true });
   for (const name of files) assert(!/(?:^|[\\/])(?:server|api|node_modules|\.git|\.env[^\\/]*|BACKEND_PLAN\.md|GUIDE\.md|seller\.js|audio\.js)(?:$|[\\/])/.test(name), name);
 });

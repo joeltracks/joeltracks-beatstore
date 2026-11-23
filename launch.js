@@ -147,7 +147,8 @@ Promise.allSettled([accessAPI('catalog'),accessAPI('access/status')]).then(([cat
     removeUnavailableCartItems();
   }else catalogStatus='error';
   purchaseServiceAvailable=status.status==='fulfilled'&&status.value.available===true;
-  renderRoute();
+  // Public startup requests must not replace a seller's active editor/file inputs.
+  if(!route().startsWith('studio'))renderRoute();
 });
 // Show the offer strip only when there is a published beat/player to dock above.
 document.addEventListener('jt:catalog',()=>{const banner=document.getElementById('bulk-banner');if(banner)banner.hidden=!tracks.some(track=>track.status==='Published');});

@@ -6,6 +6,7 @@ let sellerError='';
 let sellerSetupKey='';
 let sellerChecked=false;
 let sellerLoadEpoch=0;
+let sellerLastCheck=0;
 function sellerMessage(text){const status=document.getElementById('seller-status');if(status)status.textContent=text;}
 async function sellerAPI(path,data,retry=0){
   const response=await fetch('/api/seller/'+path,{method:data===undefined?'GET':'POST',credentials:'same-origin',cache:'no-store',headers:data===undefined?{}:{'Content-Type':'application/json'},body:data===undefined?undefined:JSON.stringify(data)});
@@ -37,19 +38,30 @@ function renderSellerWorkspace(){
   else nav(page('Seller workspace','Private access for Joel Tracks.',sellerAuthPanel()));
   if(!sellerChecked&&!sellerLoading)loadSeller();
 }
-async function loadSeller(){
+async function loadSeller({background=false}={}){
+  if(sellerLoading)return;
   sellerLoading=true;const epoch=++sellerLoadEpoch;
+  const previousStage=sellerView.stage;
+  let redraw=!background;
   try{
     const state=await sellerAPI('session');
     if(epoch!==sellerLoadEpoch)return;
-    sellerView=state;sellerChecked=true;sellerError='';
-    if(state.stage==='ready')sellerOverview=await sellerAPI('overview');
+    sellerView=state;sellerChecked=true;sellerError='';sellerLastCheck=Date.now();
+    redraw=redraw||state.stage!==previousStage;
+    if(state.stage==='ready'&&(!background||!sellerOverview))sellerOverview=await sellerAPI('overview');
+    if(state.stage!=='ready'){
+      sellerOverview=null;sellerBeatData=null;sellerBeatsAttempted=false;sellerEditingId='';
+      if(uploadRun.active){uploadRun.stopped=true;uploadRun.xhr?.abort();uploadRun.cancelConversion?.();}
+    }
   }catch(error){
     if(epoch!==sellerLoadEpoch)return;
     sellerError=error.message;sellerChecked=true;
-    if(error.status===401||error.status===403){sellerView={stage:'password'};sellerOverview=null;sellerSetupKey='';}
-    else sellerView={stage:'unavailable'};
-  }finally{sellerLoading=false;if(route().startsWith('studio')){renderSellerWorkspace();afterRender();}}
+    if(error.status===401||error.status===403){
+      sellerView={stage:'password'};sellerOverview=null;sellerSetupKey='';sellerBeatData=null;sellerBeatsAttempted=false;sellerEditingId='';redraw=true;
+      if(uploadRun.active){uploadRun.stopped=true;uploadRun.xhr?.abort();uploadRun.cancelConversion?.();}
+    }else if(background&&previousStage==='ready')sellerMessage('Connection check failed. Your work is still here; saving requires a verified session.');
+    else{sellerView={stage:'unavailable'};redraw=true;}
+  }finally{sellerLoading=false;if(epoch===sellerLoadEpoch&&redraw&&route().startsWith('studio')){renderSellerWorkspace();afterRender();}}
 }
 document.addEventListener('submit',async event=>{
   if(!['seller-login-form','seller-mfa-form'].includes(event.target.id))return;
@@ -76,7 +88,17 @@ document.addEventListener('click',async event=>{
     }
   }catch(error){sellerMessage(error.message);button.disabled=false;}
 });
-// Recheck private sessions on return; do not preserve a stale dashboard after logout/expiry.
-window.addEventListener('hashchange',()=>{if(route().startsWith('studio')){if(!sellerLoading){sellerView={stage:'loading'};sellerOverview=null;sellerChecked=false;renderSellerWorkspace();}}else{sellerView={stage:'loading'};sellerOverview=null;sellerSetupKey='';sellerChecked=false;}});
-window.addEventListener('pageshow',event=>{if(event.persisted&&route().startsWith('studio')&&!sellerLoading){sellerView={stage:'loading'};sellerOverview=null;sellerChecked=false;renderSellerWorkspace();}});
-document.addEventListener('visibilitychange',()=>{if(!route().startsWith('studio'))return;if(document.hidden&&sellerView.stage==='ready'){sellerView={stage:'loading'};sellerOverview=null;sellerChecked=false;}else if(!document.hidden&&!sellerChecked&&!sellerLoading)renderSellerWorkspace();});
+// Session checks never replace an unchanged editor or discard a selected File.
+// Every private API operation still checks the live owner/MFA session on the server.
+function recheckSeller(force=false){
+  if(!route().startsWith('studio')||sellerLoading)return;
+  if(!sellerChecked){renderSellerWorkspace();return;}
+  if(sellerView.stage!=='ready')return; // Keep authenticator setup/code entry intact on mobile app switches.
+  if(force||Date.now()-sellerLastCheck>30000)return loadSeller({background:sellerView.stage==='ready'});
+}
+window.addEventListener('hashchange',()=>{
+  if(route().startsWith('studio'))recheckSeller();
+  else{sellerView={stage:'loading'};sellerOverview=null;sellerSetupKey='';sellerChecked=false;}
+});
+window.addEventListener('pageshow',event=>{if(event.persisted)recheckSeller(true);});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)return recheckSeller();});

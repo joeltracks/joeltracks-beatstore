@@ -4,9 +4,9 @@ import { extname, resolve, relative, sep } from 'node:path';
 import { createApp, processAccessEmails, type Bindings } from './app.ts';
 
 const root = resolve('.');
-const extensions = new Set(['.html', '.css', '.js', '.svg', '.jpg', '.png', '.ico', '.woff2']);
-const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
-const runtimeFiles = new Set(['index.html', 'app.js', 'seller-auth.js', 'seller-uploads.js', 'catalog.js', 'design.js', 'license-settings.js', 'storefront.js', 'graphics.js', 'license-proposals.js', 'beat-details.js', 'footer.js', 'bulk-deals.js', 'motion.js', 'launch.js', 'launch.css', 'style.css', 'type-motion.css', 'refresh.css', 'refinement.css', 'storefront.css', 'beat-details.css', 'footer.css', 'bulk-deals.css', 'design-system/tokens.css']);
+const extensions = new Set(['.html', '.css', '.js', '.svg', '.jpg', '.png', '.ico', '.woff2', '.txt']);
+const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.txt': 'text/plain' };
+const runtimeFiles = new Set(['index.html', 'app.js', 'seller-auth.js', 'seller-uploads.js', 'seller-audio-worker.js', 'catalog.js', 'design.js', 'license-settings.js', 'storefront.js', 'graphics.js', 'license-proposals.js', 'beat-details.js', 'footer.js', 'bulk-deals.js', 'motion.js', 'launch.js', 'launch.css', 'style.css', 'type-motion.css', 'refresh.css', 'refinement.css', 'storefront.css', 'beat-details.css', 'footer.css', 'bulk-deals.css', 'design-system/tokens.css']);
 const env: Bindings = {
   APP_ORIGIN: process.env.APP_ORIGIN || 'http://127.0.0.1:4173',
   SUPABASE_URL: process.env.SUPABASE_URL, SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,

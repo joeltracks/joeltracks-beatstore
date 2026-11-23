@@ -1,0 +1,11 @@
+Joel Tracks uses LAME through the unmodified lamejs 1.2.1 browser encoder.
+LAME: https://lame.sourceforge.net/
+lamejs author: Alex Zhukov. Source: https://github.com/zhuker/lamejs
+Exact package/source: https://registry.npmjs.org/lamejs/-/lamejs-1.2.1.tgz
+
+lame.min.js is copied byte-for-byte from the pinned npm package.
+It is loaded separately by seller-audio-worker.js and may be replaced with a
+compatible version. No changes have been made to the encoder.
+The package declares LGPL-3.0. Its upstream notice is lamejs-LICENSE.txt;
+complete license texts are lamejs-LGPL-3.0.txt and lamejs-GPL-3.0.txt.
+The site's separate WAV parsing, worker orchestration and UI are original code.
