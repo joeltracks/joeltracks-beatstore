@@ -1,5 +1,7 @@
 ## Design system
 
+November 24 seller restoration: `seller-workspace.js` exposes all seven real seller sections through `server/dashboard*.ts`; `store-management.js` consumes server license/featured settings and records anonymous actions/offers. Read `docs/DASHBOARD.md`. Do not re-enable the archived seller simulation. The listening dock appears only after explicit Play selection, remains while paused, and hides in studio.
+
 The owner requested automatic commits and GitHub pushes for future completed codebase changes on November 23, 2026. Follow the standing workflow in `AGENTS.md`; verify changes before committing, preserve remote history and never commit secrets or generated output.
 
 Before any UI work, read DESIGN.md. Build new customer-facing UI from design-system/tokens.css, or the Tailwind theme in design-system/theme.css. Add missing tokens in roles.json and rebuild. Check new screens against design-system/preview.html. The reference-inspired storefront is scoped to customer views; preserve the seller workspace unless a change is requested. Existing navy dashboard styles are retained.

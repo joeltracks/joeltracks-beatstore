@@ -186,6 +186,7 @@ function changeCart(id,tierId) {
   cart.push({beatId:id,tierId});
   save('cart',cart);
   if(!previous)metric(id,'cart');
+  if(!previous&&typeof recordStoreAction==='function')recordStoreAction(id,'cart');
   agreementsReviewed=false;
   modal.close();
   renderRoute();

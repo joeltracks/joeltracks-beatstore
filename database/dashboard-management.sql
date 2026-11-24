@@ -1,0 +1,80 @@
+create table jt_private.store_settings(key text primary key,value jsonb not null check(jsonb_typeof(value)='object'),version integer not null default 1,updated_at timestamptz not null default now());
+insert into jt_private.store_settings(key,value) values('feature','{"beatId":"","label":"Featured beat"}') on conflict do nothing;
+create table jt_private.dashboard_seen(kind text primary key check(kind in ('payments','offers')),seen_at timestamptz not null default now());
+create table jt_private.custom_offers(id uuid primary key default gen_random_uuid(),reference text not null unique,beat_id uuid not null references jt_private.beats(id),artist text not null,email text not null,price numeric(12,2) not null check(price>0),publishing numeric(5,2) check(publishing between 0 and 100),master numeric(5,2) check(master between 0 and 100),terms text not null default '',status text not null default 'Offer received' check(status in ('Offer received','Counter offered','Terms agreed','Declined')),revision integer not null default 1,unread boolean not null default true,created_at timestamptz not null default now(),updated_at timestamptz not null default now());
+create table jt_private.offer_revisions(offer_id uuid references jt_private.custom_offers(id),revision integer,snapshot jsonb not null,created_at timestamptz not null default now(),primary key(offer_id,revision));
+create table jt_private.beat_activity_daily(beat_id uuid references jt_private.beats(id),day date not null default current_date,plays integer not null default 0,favorites integer not null default 0,cart integer not null default 0,primary key(beat_id,day));
+create table jt_private.beat_event_ids(id uuid primary key,created_at timestamptz not null default now());
+create index beat_event_cleanup on jt_private.beat_event_ids(created_at);
+alter table jt_private.order_items add column beat_id uuid references jt_private.beats(id);
+create index order_items_beat_id on jt_private.order_items(beat_id);
+create index custom_offers_beat_id on jt_private.custom_offers(beat_id);
+do $$declare t text;begin foreach t in array array['store_settings','dashboard_seen','custom_offers','offer_revisions','beat_activity_daily','beat_event_ids'] loop
+  execute format('alter table jt_private.%I enable row level security',t);
+  execute format('create policy deny_direct_clients on jt_private.%I as restrictive for all to anon,authenticated using(false) with check(false)',t);
+  execute format('revoke all on jt_private.%I from public,anon,authenticated',t);
+  execute format('grant select,insert,update,delete on jt_private.%I to service_role',t);
+end loop;end $$;
+
+create function public.jt_store_settings() returns jsonb language sql stable security invoker set search_path='' as $$
+select jsonb_build_object('feature',(select value||jsonb_build_object('version',version) from jt_private.store_settings where key='feature'),
+ 'licenses',(select coalesce(jsonb_object_agg(substring(key from 9),value||jsonb_build_object('version',version)),'{}') from jt_private.store_settings where key in ('license.basic','license.premium','license.unlimited','license.custom')))
+$$;
+create function public.jt_save_store_setting(p_hash text,p_key text,p_value jsonb,p_version integer) returns jsonb language plpgsql security invoker set search_path='' as $$
+declare result jsonb;begin
+ perform jt_private.require_seller(p_hash);
+ if p_key not in ('feature','license.basic','license.premium','license.unlimited','license.custom') or jsonb_typeof(p_value)<>'object' then raise exception 'INVALID_SETTING';end if;
+ if p_key='feature' and coalesce(p_value->>'beatId','')<>'' and not exists(select 1 from jt_private.beat_publications where beat_id=(p_value->>'beatId')::uuid and is_published) then raise exception 'NOT_PUBLISHED';end if;
+ update jt_private.store_settings set value=p_value,version=version+1,updated_at=now() where key=p_key and version=p_version returning value||jsonb_build_object('version',version) into result;
+ if not found then raise exception 'VERSION_CHANGED';end if;return result;
+end $$;
+create function public.jt_submit_custom_offer(p_data jsonb,p_email_hash text) returns jsonb language plpgsql security invoker set search_path='' as $$
+declare new_id uuid:=gen_random_uuid();v_offer jt_private.custom_offers;begin
+ if not exists(select 1 from jt_private.beat_publications where beat_id=(p_data->>'beatId')::uuid and is_published) then raise exception 'NOT_PUBLISHED';end if;
+ if not jt_private.allow_access_request('offer:'||p_email_hash,3) or not jt_private.allow_access_request('offers:global',500) then raise exception 'RATE_LIMIT';end if;
+ insert into jt_private.custom_offers(id,reference,beat_id,artist,email,price,publishing,master,terms)
+ values(new_id,'JT-OFFER-'||upper(replace(new_id::text,'-','')),(p_data->>'beatId')::uuid,p_data->>'artist',p_data->>'email',(p_data->>'price')::numeric,(p_data->>'publishing')::numeric,(p_data->>'master')::numeric,p_data->>'terms') returning * into v_offer;
+ insert into jt_private.offer_revisions values(v_offer.id,1,to_jsonb(v_offer),now());return jsonb_build_object('reference',v_offer.reference);
+end $$;
+create function public.jt_update_custom_offer(p_hash text,p_id uuid,p_data jsonb,p_version integer) returns jsonb language plpgsql security invoker set search_path='' as $$
+declare v_offer jt_private.custom_offers;begin
+ perform jt_private.require_seller(p_hash);
+ update jt_private.custom_offers set price=(p_data->>'price')::numeric,publishing=(p_data->>'publishing')::numeric,master=(p_data->>'master')::numeric,terms=p_data->>'terms',status=p_data->>'status',revision=revision+1,unread=false,updated_at=now() where id=p_id and revision=p_version returning * into v_offer;
+ if not found then raise exception 'VERSION_CHANGED';end if;
+ insert into jt_private.offer_revisions values(v_offer.id,v_offer.revision,to_jsonb(v_offer),now());return jsonb_build_object('revision',v_offer.revision);
+end $$;
+create function public.jt_dashboard_seen(p_hash text,p_kind text) returns void language plpgsql security invoker set search_path='' as $$begin
+ perform jt_private.require_seller(p_hash);if p_kind not in ('offers','payments') then raise exception 'INVALID_KIND';end if;
+ insert into jt_private.dashboard_seen(kind) values(p_kind) on conflict(kind) do update set seen_at=now();
+ if p_kind='offers' then update jt_private.custom_offers set unread=false where unread;end if;
+end $$;
+create function public.jt_record_beat_activity(p_id uuid,p_beat uuid,p_kind text) returns void language plpgsql security invoker set search_path='' as $$begin
+ if p_kind not in ('play','favorite','cart') or not exists(select 1 from jt_private.beat_publications where beat_id=p_beat and is_published) then return;end if;
+ if not jt_private.allow_access_request('activity:'||p_beat::text,300) then return;end if;
+ delete from jt_private.beat_event_ids where id in (select id from jt_private.beat_event_ids where created_at<now()-interval '2 days' limit 1000);
+ insert into jt_private.beat_event_ids(id) values(p_id) on conflict do nothing;if not found then return;end if;
+ insert into jt_private.beat_activity_daily(beat_id,plays,favorites,cart) values(p_beat,(p_kind='play')::integer,(p_kind='favorite')::integer,(p_kind='cart')::integer)
+ on conflict(beat_id,day) do update set plays=beat_activity_daily.plays+excluded.plays,favorites=beat_activity_daily.favorites+excluded.favorites,cart=beat_activity_daily.cart+excluded.cart;
+end $$;
+
+create function public.jt_seller_dashboard(p_hash text) returns jsonb language plpgsql security invoker set search_path='' as $$begin
+ perform jt_private.require_seller(p_hash);
+ return jsonb_build_object('settings',public.jt_store_settings(),'catalog',public.jt_public_catalog(),
+ 'unread',jsonb_build_object('offers',(select count(*) from jt_private.custom_offers where unread),'payments',(select count(*) from jt_private.orders where status='paid' and paid_at>coalesce((select seen_at from jt_private.dashboard_seen where kind='payments'),'epoch'::timestamptz))),
+ 'totals',jsonb_build_object('beats',(select count(*) from jt_private.beats),'published',(select count(*) from jt_private.beat_publications where is_published),'plays',(select coalesce(sum(plays),0) from jt_private.beat_activity_daily),'favorites',(select coalesce(sum(favorites),0) from jt_private.beat_activity_daily),'cart',(select coalesce(sum(cart),0) from jt_private.beat_activity_daily)),
+ 'paymentGroups',(select coalesce(jsonb_agg(g),'[]') from(select currency,status,count(*) as count,sum(total_cents) as cents from jt_private.orders group by currency,status)g),
+ 'payments',(select coalesce(jsonb_agg(p order by p.created desc),'[]') from(select o.reference,o.status,o.currency,o.total_cents as cents,o.created_at as created,o.buyer_email as email,(select coalesce(jsonb_agg(jsonb_build_object('title',i.beat_title,'license',i.license_name)),'[]') from jt_private.order_items i where i.order_id=o.id) as items from jt_private.orders o order by created_at desc limit 100)p),
+ 'salesByBeat',(select coalesce(jsonb_agg(t order by t.count desc),'[]') from(select i.beat_id as id,coalesce(max(b.title),max(i.beat_title)) as title,count(distinct o.id) as count from jt_private.order_items i join jt_private.orders o on o.id=i.order_id left join jt_private.beats b on b.id=i.beat_id where o.status='paid' group by i.beat_id,case when i.beat_id is null then i.beat_title else null end having count(distinct o.id)>0)t),
+ 'activity',(select coalesce(jsonb_agg(t order by t.day),'[]') from(select d::date as day,coalesce((select sum(a.plays) from jt_private.beat_activity_daily a where a.day=d::date),0) as plays,coalesce((select sum(o.total_cents) from jt_private.orders o where o.status='paid' and o.currency='USD' and o.paid_at::date=d::date),0) as cents from generate_series(current_date-29,current_date,interval '1 day')d)t),
+ 'perBeat',(select coalesce(jsonb_agg(t order by t.plays desc),'[]') from(select b.id,b.title,coalesce(sum(a.plays),0) as plays,coalesce(sum(a.favorites),0) as favorites,coalesce(sum(a.cart),0) as cart from jt_private.beats b left join jt_private.beat_activity_daily a on a.beat_id=b.id group by b.id,b.title)t),
+ 'offers',(select coalesce(jsonb_agg(o order by o.created desc),'[]') from(select c.id,c.reference,c.artist,c.email,c.price,c.publishing,c.master,c.terms,c.status,c.revision,c.unread,c.created_at as created,b.title,c.beat_id as "beatId" from jt_private.custom_offers c join jt_private.beats b on b.id=c.beat_id order by c.created_at desc limit 100)o));
+end $$;
+revoke all on function public.jt_store_settings(),public.jt_save_store_setting(text,text,jsonb,integer),public.jt_submit_custom_offer(jsonb,text),public.jt_update_custom_offer(text,uuid,jsonb,integer),public.jt_dashboard_seen(text,text),public.jt_record_beat_activity(uuid,uuid,text),public.jt_seller_dashboard(text) from public,anon,authenticated;
+grant execute on function public.jt_store_settings(),public.jt_save_store_setting(text,text,jsonb,integer),public.jt_submit_custom_offer(jsonb,text),public.jt_update_custom_offer(text,uuid,jsonb,integer),public.jt_dashboard_seen(text,text),public.jt_record_beat_activity(uuid,uuid,text),public.jt_seller_dashboard(text) to service_role;
+
+insert into jt_private.store_settings(key,value) values('license.basic',$licenseSeed${"id":"basic","name":"Basic License","price":50,"files":"MP3","publishing":50,"major":90,"indie":70,"grant":"Scope: One new song. Exclusivity: Nonexclusive. Music videos: 1. Live performances: No performance-count cap. Radio / TV broadcast: Separate written clearance. Film, ads and games: Separate sync agreement.","limits":"Paid copies / downloads: 5,000 total. Audio-only streams: 100,000 total. Monetized video views: 250,000 total. Term: 10 years. Territory: Worldwide. Contact JT before exceeding the cap; new terms required. Counts apply to the licensed new song across outlets; counting definitions and expiry treatment require confirmation.","terms":"Content ID reference registration: Not permitted for shared beat material. Producer credit: Produced by Joel Tracks. Raw beat / stems resale: Not permitted. Ownership, royalty revenue basis and deductions, artist eligibility, registration, sample clearance, reporting, termination, refunds, governing law and dispute terms require confirmation and review by a qualified lawyer in the applicable jurisdiction.","version":1,"delivery":["mp3"],"usageDefaultsVersion":1}$licenseSeed$::jsonb) on conflict(key) do nothing;
+insert into jt_private.store_settings(key,value) values('license.premium',$licenseSeed${"id":"premium","name":"Premium License","price":100,"files":"MP3 + WAV","publishing":50,"major":90,"indie":70,"grant":"Scope: One new song. Exclusivity: Nonexclusive. Music videos: 2. Live performances: No performance-count cap. Radio / TV broadcast: Separate written clearance. Film, ads and games: Separate sync agreement.","limits":"Paid copies / downloads: 10,000 total. Audio-only streams: 500,000 total. Monetized video views: 1,000,000 total. Term: 10 years. Territory: Worldwide. Contact JT before exceeding the cap; new terms required. Counts apply to the licensed new song across outlets; counting definitions and expiry treatment require confirmation.","terms":"Content ID reference registration: Not permitted for shared beat material. Producer credit: Produced by Joel Tracks. Raw beat / stems resale: Not permitted. Ownership, royalty revenue basis and deductions, artist eligibility, registration, sample clearance, reporting, termination, refunds, governing law and dispute terms require confirmation and review by a qualified lawyer in the applicable jurisdiction.","version":1,"delivery":["mp3","wav"],"usageDefaultsVersion":1}$licenseSeed$::jsonb) on conflict(key) do nothing;
+insert into jt_private.store_settings(key,value) values('license.unlimited',$licenseSeed${"id":"unlimited","name":"Unlimited License","price":500,"files":"MP3 + WAV + Stems","publishing":50,"major":90,"indie":70,"grant":"Scope: One new song. Exclusivity: Nonexclusive. Music videos: No music-video cap. Live performances: No performance-count cap. Radio / TV broadcast: Separate written clearance. Film, ads and games: Separate sync agreement.","limits":"Paid copies / downloads: No unit cap. Audio-only streams: No audio-stream cap. Monetized video views: No video-view cap. Term: 10 years. Territory: Worldwide. Other reserved uses still require consent. Counts apply to the licensed new song across outlets; counting definitions and expiry treatment require confirmation.","terms":"Content ID reference registration: Not permitted for shared beat material. Producer credit: Produced by Joel Tracks. Raw beat / stems resale: Not permitted. Ownership, royalty revenue basis and deductions, artist eligibility, registration, sample clearance, reporting, termination, refunds, governing law and dispute terms require confirmation and review by a qualified lawyer in the applicable jurisdiction.","version":1,"delivery":["mp3","wav","stems"],"usageDefaultsVersion":1}$licenseSeed$::jsonb) on conflict(key) do nothing;
+insert into jt_private.store_settings(key,value) values('license.custom',$licenseSeed${"id":"custom","name":"Custom License","price":null,"files":"Negotiated","publishing":50,"major":90,"indie":70,"grant":"Price, delivery files, publishing and master splits, permitted uses and exclusivity are negotiated for this beat. Any exclusive arrangement must address existing licenses.","limits":"Song count, copies, streams, videos, video views, live performances, broadcast, sync uses, term and territory must be recorded in the negotiated agreement.","terms":"Producer credit, Content ID eligibility, raw beat or stems resale, upgrades and all remaining terms require written agreement. Specific negotiated terms appear with the offer revision. Legal contracting details, sample clearance, royalty accounting, termination, governing law and disputes require confirmation and lawyer review.","version":1,"delivery":[],"usageDefaultsVersion":1}$licenseSeed$::jsonb) on conflict(key) do nothing;
+
+notify pgrst, 'reload schema';

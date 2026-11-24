@@ -49,10 +49,7 @@ function editBeat(){ showStudio(); }
 function negotiate(){ showStudio(); }
 function addCustom(){ showOffer(); }
 function showOffer(id='') {
-  const track=beat(id);
-  const subject=track?'Custom license enquiry: '+track.title:'Custom license enquiry';
-  showDialog('Let’s discuss your release', 'Negotiate price, files and royalty splits directly with JT.',
-    (track?'<p><strong>'+escapeHTML(track.title)+'</strong></p>':'')+'<p>Share your artist name, release plans and the terms you have in mind.</p><a class="btn" href="'+emailLink(subject)+'">'+icon('mail',18)+' Email JT</a>');
+  customOfferForm(id);
 }
 function showBuyerOffers(){
   nav(page('Custom licensing','Discuss your release directly with JT.',empty('Let’s find the right terms','Email JT with the beat, price, files and royalty splits you want to discuss.','<a class="btn" href="'+emailLink('Custom license enquiry')+'">Email JT '+icon('mail',18)+'</a>')));
@@ -91,7 +88,7 @@ async function playBeat(id,force=false){
   const url=track.previewUrl;
   if(typeof url!=='string'||!(/^(?:https:\/\/|\/(?!\/))/.test(url))){announce('This beat’s preview is unavailable.');return;}
   audio.pause();sourceURL=url;activeTrack=id;audio.src=url;renderPlayer();
-  try{await audio.play();syncPlayButtons();}catch{announce('Audio could not be played. Please try again.');}
+  try{await audio.play();syncPlayButtons();recordStoreAction(id,'play');}catch{announce('Audio could not be played. Please try again.');}
 }
 function releasePlatformLogos(){
   const platforms=[
@@ -141,6 +138,7 @@ if(location.pathname==='/access'){
 renderRoute();
 Promise.allSettled([accessAPI('catalog'),accessAPI('access/status')]).then(([catalog,status])=>{
   if(catalog.status==='fulfilled'){
+    if(catalog.value.settings)applyStoreSettings(catalog.value.settings);
     // No local/demo records are imported into the live catalog. Publication is a future seller API operation.
     tracks=Array.isArray(catalog.value.beats)?catalog.value.beats.filter(track=>track.status==='Published'&&!track.demo):[];
     catalogStatus=tracks.length?'ready':'empty';
@@ -151,4 +149,4 @@ Promise.allSettled([accessAPI('catalog'),accessAPI('access/status')]).then(([cat
   if(!route().startsWith('studio'))renderRoute();
 });
 // Show the offer strip only when there is a published beat/player to dock above.
-document.addEventListener('jt:catalog',()=>{const banner=document.getElementById('bulk-banner');if(banner)banner.hidden=!tracks.some(track=>track.status==='Published');});
+document.addEventListener('jt:catalog',syncBulkVisibility);

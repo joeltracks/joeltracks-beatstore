@@ -13,6 +13,7 @@ function sellerPublicationControls(beat){
 }
 async function refreshPublishedCatalog(){
   const result=await accessAPI('catalog');
+  if(result.settings&&typeof applyStoreSettings==='function')applyStoreSettings(result.settings);
   tracks=Array.isArray(result.beats)?result.beats.filter(track=>track.status==='Published'&&!track.demo):[];
   catalogStatus=tracks.length?'ready':'empty';removeUnavailableCartItems();
   if(activeTrack&&!tracks.some(track=>track.id===activeTrack)){audio.pause();audio.removeAttribute('src');sourceURL='';activeTrack='';}

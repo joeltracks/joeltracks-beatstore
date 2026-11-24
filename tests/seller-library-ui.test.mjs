@@ -5,21 +5,41 @@ import assert from 'node:assert/strict';
 
 const uploads = await readFile(new URL('../seller-uploads.js', import.meta.url), 'utf8');
 const auth = await readFile(new URL('../seller-auth.js', import.meta.url), 'utf8');
+const management=await readFile(new URL('../seller-workspace.js',import.meta.url),'utf8');
 function workspace() {
   const timers = [], clicks = [], events = {}, windowEvents = {};
   const ctx = vm.createContext({
     document: { hidden: false, addEventListener(name, handler) { (events[name] ||= []).push(handler); if (name === 'click') clicks.push(handler); }, getElementById() { return null; } },
-    window: { addEventListener(name, handler) { (windowEvents[name] ||= []).push(handler); } }, setTimeout(fn) { timers.push(fn); }, clearTimeout() {},
+    window: { addEventListener(name, handler) { (windowEvents[name] ||= []).push(handler); } }, setTimeout(fn) { timers.push(fn); }, clearTimeout() {},setInterval(){},
     escapeHTML: value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'),
     icon: () => '', categories: ['R&B Beats', 'Afro Beats', 'Trap Beats'], tiers: [],
     route: () => 'studio-catalog', nav() {}, afterRender() {}, page: (...parts) => parts.join(''),
     empty: title => '<p>' + title + '</p>', formatCount: String, cash: String,
   });
-  vm.runInContext(uploads + '\n' + auth, ctx);
+  vm.runInContext(uploads + '\n'+management+'\n' + auth, ctx);
   vm.runInContext("sellerView={stage:'ready'};sellerChecked=true;sellerOverview={recentOrders:[],paidOrders:0,revenueCents:0,pendingOrders:0};", ctx);
+  vm.runInContext("sellerManagement={settings:{},totals:{},activity:[],payments:[],offers:[],paymentGroups:[],perBeat:[],salesByBeat:[],unread:{}}",ctx);
   return { ctx, timers, clicks, events, windowEvents, run: source => vm.runInContext(source, ctx) };
 }
 const data = { beats: [], limits: { mp3: 52428800, wav: 262144000, stems: 536870912, cover: 10485760 }, storageAvailable: true };
+
+test('all seller sections are reachable without loading archived simulation data',()=>{
+ const {run}=workspace(),html=run('sellerDashboard()');
+ for(const route of ['studio','studio-catalog','studio-stats','studio-payments','studio-offers','studio-feature','studio-licenses'])assert(html.includes('href="#'+route+'"'));
+ assert.doesNotMatch(html,/Simulate sale|Seller demo|Sample payments/);
+});
+
+test('purchase tally omits beats without a paid sale',()=>{
+ const {ctx,run}=workspace();ctx.sales=[{id:'paid',title:'Sold beat',count:2},{id:'zero',title:'Never sold',count:0}];
+ run('sellerManagement.salesByBeat=sales');const html=run('managementPayments()');
+ assert.match(html,/Sold beat/);assert.doesNotMatch(html,/Never sold/);
+});
+
+test('background management updates leave the upload editor intact',async()=>{
+ const {ctx,run}=workspace();ctx.sellerAPI=async()=>({settings:{},totals:{plays:1},offers:[],unread:{}});
+ let redraws=0;ctx.document.querySelectorAll=()=>[];ctx.renderSellerWorkspace=()=>redraws++;
+ await run('loadSellerManagement()');assert.equal(redraws,0);assert.equal(run('sellerManagement.totals.plays'),1);
+});
 
 test('a failed library request stops retrying until the seller explicitly retries', async () => {
   const { ctx, timers, clicks, run } = workspace();

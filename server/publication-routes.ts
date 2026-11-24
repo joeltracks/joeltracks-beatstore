@@ -3,17 +3,20 @@ import type { Bindings } from './app.ts';
 import type { SellerGuard } from './upload-routes.ts';
 import { validId, UploadError } from './uploads.ts';
 import { createPublicationRepository,createPublicationStorage,type PublicationDependencies } from './publications.ts';
+import {dashboardConfigured,dashboardRepository} from './dashboard-routes.ts';
+import type {DashboardDependencies} from './dashboard.ts';
 
 export function publicationRepository(env:Bindings,d:PublicationDependencies){return d.publicationRepository||createPublicationRepository(env.SUPABASE_URL!,env.SUPABASE_SECRET_KEY!);}
 function publicationStorage(env:Bindings,d:PublicationDependencies){return d.publicationStorage||createPublicationStorage('1b4bc53beb85cda4d8618ee8a695585f',env.R2_ACCESS_KEY_ID!,env.R2_SECRET_ACCESS_KEY!);}
 export function publicationConfigured(env:Bindings,d:PublicationDependencies){return Boolean(d.publicationRepository||env.SUPABASE_URL&&env.SUPABASE_SECRET_KEY);}
 function storageConfigured(env:Bindings,d:PublicationDependencies){return Boolean(d.publicationStorage||env.R2_ACCESS_KEY_ID&&env.R2_SECRET_ACCESS_KEY);}
 
-export function registerPublicCatalogRoutes(app:Hono<{Bindings:Bindings}>,d:PublicationDependencies){
+export function registerPublicCatalogRoutes(app:Hono<{Bindings:Bindings}>,d:PublicationDependencies&DashboardDependencies){
   app.get('/api/catalog',async c=>{
     c.header('Cache-Control','no-store');
     const beats=publicationConfigured(c.env,d)?await publicationRepository(c.env,d).catalog():[];
-    return c.json({beats,state:beats.length?'ready':'awaiting-publication',checkoutAvailable:false});
+    const settings=dashboardConfigured(c.env,d)?await dashboardRepository(c.env,d).settings():null;
+    return c.json({beats,settings,state:beats.length?'ready':'awaiting-publication',checkoutAvailable:false});
   });
   app.on(['GET','HEAD'],'/api/media/:beatId/:version/:kind',async c=>{
     c.header('Cache-Control','private, no-store');c.header('Referrer-Policy','no-referrer');

@@ -3,6 +3,7 @@ import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import { bodyLimit } from 'hono/body-limit';
 import { registerSellerRoutes, type SellerDependencies } from './seller-routes.ts';
 import { registerPublicCatalogRoutes } from './publication-routes.ts';
+import {registerPublicManagementRoutes} from './dashboard-routes.ts';
 import { createRepository, type Repository } from './repository.ts';
 import { hash, keyedHash, randomToken, seal, unseal, validToken, safeFilename } from './security.ts';
 
@@ -71,7 +72,7 @@ export async function processAccessEmails(env: Bindings, dependencies: Dependenc
 }
 export function createApp(dependencies: Dependencies = {}) {
   const app = new Hono<{ Bindings: Bindings }>();
-  app.use('/api/*', bodyLimit({ maxSize: 4096, onError: c => c.json({ error: 'Request is too large.' }, 413) }));
+  app.use('/api/*', bodyLimit({ maxSize: 65536, onError: c => c.json({ error: 'Request is too large.' }, 413) }));
   app.use('*', async (c, next) => {
     c.header('X-Content-Type-Options', 'nosniff');
     c.header('Referrer-Policy', 'no-referrer');
@@ -80,9 +81,10 @@ export function createApp(dependencies: Dependencies = {}) {
     if (c.req.method !== 'GET' && c.req.method !== 'HEAD') {
       if (!origin(c.env) || c.req.header('Origin') !== origin(c.env)) return c.json({ error: 'Request not permitted. Reload this page and try again.' }, 403);
       if (!c.req.header('Content-Type')?.startsWith('application/json')) return c.json({ error: 'Use a JSON request.' }, 415);
-      if (Number(c.req.header('Content-Length') || 0) > 4096) return c.json({ error: 'Request is too large.' }, 413);
+      const limit=c.req.path==='/api/seller/settings/license'?49152:['/api/offers'].includes(c.req.path)||/^\/api\/seller\/offers\//.test(c.req.path)?24576:4096;
+      if (Number(c.req.header('Content-Length') || 0) > limit) return c.json({ error: 'Request is too large.' }, 413);
       const body = await c.req.text();
-      if (new TextEncoder().encode(body).length > 4096) return c.json({ error: 'Request is too large.' }, 413);
+      if (new TextEncoder().encode(body).length > limit) return c.json({ error: 'Request is too large.' }, 413);
       try { JSON.parse(body); } catch { return c.json({ error: 'Invalid request.' }, 400); }
     }
     await next();
@@ -93,6 +95,7 @@ export function createApp(dependencies: Dependencies = {}) {
   });
   app.get('/api/health', c => c.json({ status: 'ok' }));
   registerPublicCatalogRoutes(app,dependencies);
+  registerPublicManagementRoutes(app,dependencies);
   app.post('/api/checkout', c => c.json({ error: 'Checkout is not open yet. Please contact JT about licensing.' }, 503));
   app.get('/api/access/status', c => c.json({ available: configured(c.env, dependencies) }));
   app.post('/api/access/request', async c => {

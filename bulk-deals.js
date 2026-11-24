@@ -14,6 +14,11 @@ function calculateBulkDeal(prices) {
 }
 
 let bulkDockObserver;
+function syncBulkVisibility(){
+  const player=document.getElementById('player'),banner=document.getElementById('bulk-banner');
+  if(banner)banner.hidden=!player?.hasChildNodes()||route().startsWith('studio');
+  if(player&&banner)syncBulkDock();
+}
 function syncBulkDock() {
   const player=document.getElementById('player');
   const banner=document.getElementById('bulk-banner');
@@ -30,4 +35,5 @@ function renderBulkBanner() {
   bulkDockObserver=new ResizeObserver(syncBulkDock);
   bulkDockObserver.observe(document.getElementById('player'));
   bulkDockObserver.observe(banner);
+  syncBulkVisibility();
 }

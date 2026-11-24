@@ -114,12 +114,11 @@ function showCheckout() {
 }
 function renderPlayer() {
   const player=$('#player');
-  if(beat(activeTrack)?.status!=='Published')activeTrack=tracks.find(item=>item.status==='Published')?.id;
   const track=beat(activeTrack);
-  if(route().startsWith('studio')||!track){player.innerHTML='';return;}
+  if(route().startsWith('studio')||track?.status!=='Published'||!sourceURL){player.innerHTML='';syncBulkVisibility();return;}
   const playing=!audio.paused&&Boolean(sourceURL);
   player.innerHTML='<div class="shell player-inner"><div class="player-track">'+cover(track,true)+'<div class="track-name"><b>'+beatPageLink(track)+'</b><small>Joel Tracks · '+escapeHTML(track.genre.replace(' Beats',''))+'</small></div>'+buttonIcon('heart',(favorites.has(track.id)?'Remove from favorites: ':'Favorite ')+track.title,'favorite',track.id,favorites.has(track.id))+'</div><div class="player-center"><div class="transport">'+buttonIcon('prev','Previous beat','previous')+'<button class="icon-btn main-play" data-action="play" data-id="'+escapeHTML(track.id)+'" aria-label="'+(playing?'Pause current beat':'Play current beat')+'">'+icon(playing?'pause':'play',20)+'</button>'+buttonIcon('next','Next beat','next')+'</div><span class="time" id="elapsed">0:00</span><div class="seek-wrap"><div class="seek-track"><div id="seek-fill"></div></div><input id="seek" type="range" min="0" max="'+(track.duration||1)+'" step=".1" value="'+audio.currentTime+'" aria-label="Playback position" '+(sourceURL?'':'disabled')+'></div><span class="time" id="duration">'+clock(track.duration)+'</span></div><div class="player-tools"><div class="volume">'+buttonIcon(audio.muted?'mute':'volume',audio.muted?'Unmute':'Mute','mute')+'<input type="range" id="volume" min="0" max="1" step=".01" value="'+audio.volume+'" aria-label="Preview volume"></div><button class="player-buy" data-action="choose" data-id="'+escapeHTML(track.id)+'" aria-label="Add playing beat '+escapeHTML(track.title)+' to cart">'+icon('plus',18)+'<span>Add license</span></button></div></div>';
-  updateProgress();
+  updateProgress();syncBulkVisibility();
 }
 function updateProgress() {
   const seek=$('#seek');

@@ -33,7 +33,7 @@ The Cloudflare target declares equivalent secret bindings, but no Cloudflare bac
 - Enrollment cannot replace an existing verified factor from a password-only session. Only the owner can see the setup secret after password verification. Save a securely protected backup before completing setup. No email recovery or MFA bypass is invented. Before live selling, enroll/test a second factor and document recovery through Supabase's administrative tools.
 - Sign-in, MFA and dashboard responses use private/no-store caching. UI state is rechecked after navigation and browser back/forward restoration. No seller data or token is saved in localStorage.
 
-The current private dashboard reads real paid/pending order counts, paid USD totals and recent orders from the database. It shows an honest empty state when no orders exist. Private draft uploads and metadata editing are now connected; see [uploads](UPLOADS.md). Catalog publication, license editing and the other seller management APIs remain subsequent integrations. The archived seller simulation is not re-enabled.
+The private dashboard reads real order counts, payment reports, activity, offers and versioned license/featured-beat settings. It shows empty states when no records exist. Private uploads, metadata editing and explicit publication remain connected; see [uploads](UPLOADS.md) and the [restored dashboard](DASHBOARD.md). The archived seller simulation is not re-enabled. The license editor permits 48 KiB JSON bodies and offer routes 24 KiB; other mutations retain the 4 KiB limit.
 
 ## Verification and remaining limits
 
